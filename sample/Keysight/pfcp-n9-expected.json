@@ -1,0 +1,38 @@
+[
+  {
+    "SEID": 1,
+    "UEIPAddress": "",
+    "NetworkInstance": "",
+    "EndpointAddress": "",
+    "TEID": 0,
+    "QFI": 0,
+    "Source": 0
+  },
+  {
+    "SEID": 1,
+    "UEIPAddress": "172.16.0.1",
+    "NetworkInstance": "n9-nw",
+    "EndpointAddress": "20.0.90.11",
+    "TEID": 1,
+    "QFI": 0,
+    "Source": 0
+  },
+  {
+    "SEID": 1,
+    "UEIPAddress": "172.16.0.1",
+    "NetworkInstance": "n9-nw",
+    "EndpointAddress": "20.0.90.11",
+    "TEID": 1,
+    "QFI": 0,
+    "Source": 0
+  },
+  {
+    "SEID": 1,
+    "UEIPAddress": "172.16.0.1",
+    "NetworkInstance": "n9-nw",
+    "EndpointAddress": "20.0.90.11",
+    "TEID": 1,
+    "QFI": 0,
+    "Source": 0
+  }
+]

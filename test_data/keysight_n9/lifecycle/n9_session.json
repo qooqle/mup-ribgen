@@ -1,0 +1,93 @@
+{
+  "name": "keysight_n9_lifecycle",
+  "steps": [
+    {
+      "type": "establishment",
+      "establishment": {
+        "SEID": 0,
+        "Fields": {
+          "pfcp": {
+            "msg_type": 50,
+            "seid": 0,
+            "f_seid": {
+              "seid": 1,
+              "ipv4": "20.100.40.100"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "modification",
+      "modification": {
+        "SEID": 1,
+        "Fields": {
+          "pfcp": {
+            "msg_type": 52,
+            "seid": 1,
+            "create_pdr": [
+              {
+                "pdr_id": 11,
+                "pdi": {
+                  "source_interface": 0,
+                  "network_instance": "n3-nw"
+                },
+                "far_id": 11,
+                "qer_id": 6
+              },
+              {
+                "pdr_id": 12,
+                "pdi": {
+                  "source_interface": 1,
+                  "network_instance": "n9-nw",
+                  "ue_ip_address": {
+                    "ipv4": "172.16.0.1"
+                  }
+                },
+                "far_id": 12,
+                "qer_id": 6
+              }
+            ],
+            "create_far": [
+              {
+                "far_id": 11,
+                "apply_action": 512,
+                "forwarding_parameters": {
+                  "destination_interface": 1,
+                  "network_instance": "n9-nw",
+                  "outer_header_creation": {
+                    "teid": 1,
+                    "ipv4": "20.0.90.11"
+                  }
+                }
+              },
+              {
+                "far_id": 12,
+                "apply_action": 1024,
+                "forwarding_parameters": {
+                  "destination_interface": 0,
+                  "network_instance": "n3-nw"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expected_session_info": {
+        "SEID": 1,
+        "UEIPAddress": "172.16.0.1",
+        "NetworkInstance": "n9-nw",
+        "EndpointAddress": "20.0.90.11",
+        "TEID": 1,
+        "QFI": 0,
+        "Source": 0
+      }
+    },
+    {
+      "type": "deletion",
+      "deletion": {
+        "SEID": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "name": "keysight_n9_modification",
+    "type": "modification",
+    "modification": {
+      "SEID": 2,
+      "Fields": {
+        "pfcp": {
+          "msg_type": 52,
+          "seid": 2,
+          "create_pdr": [
+            {
+              "pdr_id": 11,
+              "pdi": {
+                "source_interface": 0,
+                "network_instance": "n3-nw"
+              },
+              "far_id": 11,
+              "qer_id": 6
+            },
+            {
+              "pdr_id": 12,
+              "pdi": {
+                "source_interface": 1,
+                "network_instance": "n9-nw",
+                "ue_ip_address": {
+                  "ipv4": "172.16.0.1"
+                }
+              },
+              "far_id": 12,
+              "qer_id": 6
+            }
+          ],
+          "create_far": [
+            {
+              "far_id": 11,
+              "apply_action": 512,
+              "forwarding_parameters": {
+                "destination_interface": 1,
+                "network_instance": "n9-nw",
+                "outer_header_creation": {
+                  "teid": 1,
+                  "ipv4": "20.0.90.11"
+                }
+              }
+            },
+            {
+              "far_id": 12,
+              "apply_action": 1024,
+              "forwarding_parameters": {
+                "destination_interface": 0,
+                "network_instance": "n3-nw"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "expected_delta": {
+      "SEID": 2,
+      "UpdatePDRs": {
+        "11": {
+          "PDRID": 11,
+          "Fields": {
+            "pdr_id": 11,
+            "pdi": {
+              "source_interface": 0,
+              "network_instance": "n3-nw"
+            },
+            "far_id": 11,
+            "qer_id": 6
+          }
+        },
+        "12": {
+          "PDRID": 12,
+          "Fields": {
+            "pdr_id": 12,
+            "pdi": {
+              "source_interface": 1,
+              "network_instance": "n9-nw",
+              "ue_ip_address": {
+                "ipv4": "172.16.0.1"
+              }
+            },
+            "far_id": 12,
+            "qer_id": 6
+          }
+        }
+      },
+      "UpdateFARs": {
+        "11": {
+          "FARID": 11,
+          "Fields": {
+            "far_id": 11,
+            "apply_action": 512,
+            "forwarding_parameters": {
+              "destination_interface": 1,
+              "network_instance": "n9-nw",
+              "outer_header_creation": {
+                "teid": 1,
+                "ipv4": "20.0.90.11"
+              }
+            }
+          }
+        },
+        "12": {
+          "FARID": 12,
+          "Fields": {
+            "far_id": 12,
+            "apply_action": 1024,
+            "forwarding_parameters": {
+              "destination_interface": 0,
+              "network_instance": "n3-nw"
+            }
+          }
+        }
+      },
+      "RemovePDRs": null,
+      "RemoveFARs": null
+    }
+  }
+]

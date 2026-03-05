@@ -1,0 +1,2354 @@
+[
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:50:45.467335000Z",
+          "frame.time_utc": "2025-12-04T05:50:45.467335000Z",
+          "frame.time_epoch": "2025-12-04T05:50:45.467335000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_relative": "0.000000000",
+          "frame.number": "1",
+          "frame.len": "67",
+          "frame.cap_len": "67",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "53",
+          "ip.id": "0x6bd4",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x55ae",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.src_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.dst": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.dst_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "47862",
+          "udp.dstport": "8805",
+          "udp.port": "47862",
+          "udp.port": "8805",
+          "udp.length": "33",
+          "udp.checksum": "0x7968",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "1",
+          "Timestamps": {
+            "udp.time_relative": "0.000000000",
+            "udp.time_delta": "0.000000000"
+          },
+          "udp.payload": "20:05:00:15:00:00:00:00:00:3c:00:05:00:14:64:28:64:00:60:00:04:ec:db:9f:b2"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x20",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "0"
+          },
+          "pfcp.msg_type": "5",
+          "pfcp.length": "21",
+          "pfcp.seqno": "0",
+          "pfcp.spare_oct": "0",
+          "Node ID : IPv4 address: 20.100.40.100": {
+            "pfcp.ie_type": "60",
+            "pfcp.ie_len": "5",
+            "pfcp.spare_h1": "0",
+            "pfcp.node_id_type": "0",
+            "pfcp.node_id_ipv4": "20.100.40.100"
+          },
+          "Recovery Time Stamp : Dec  4, 2025 05:50:42.000000000 UTC": {
+            "pfcp.ie_type": "96",
+            "pfcp.ie_len": "4",
+            "pfcp.recovery_time_stamp": "2025-12-04T05:50:42.000000000Z"
+          },
+          "pfcp.response_in": "2"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:50:45.470667000Z",
+          "frame.time_utc": "2025-12-04T05:50:45.470667000Z",
+          "frame.time_epoch": "2025-12-04T05:50:45.470667000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "0.003332000",
+          "frame.time_delta_displayed": "0.003332000",
+          "frame.time_relative": "0.003332000",
+          "frame.number": "2",
+          "frame.len": "78",
+          "frame.cap_len": "78",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "64",
+          "ip.id": "0xb5e1",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x0b96",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.src_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.dst": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.dst_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "8805",
+          "udp.dstport": "47862",
+          "udp.port": "8805",
+          "udp.port": "47862",
+          "udp.length": "44",
+          "udp.checksum": "0x7973",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "2",
+          "Timestamps": {
+            "udp.time_relative": "0.003332000",
+            "udp.time_delta": "0.003332000"
+          },
+          "udp.payload": "20:06:00:20:00:00:00:00:00:3c:00:05:00:14:64:28:0a:00:13:00:01:01:00:60:00:04:ec:db:9f:b2:00:2b:00:02:30:01"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x20",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "0"
+          },
+          "pfcp.msg_type": "6",
+          "pfcp.length": "32",
+          "pfcp.seqno": "0",
+          "pfcp.spare_oct": "0",
+          "Node ID : IPv4 address: 20.100.40.10": {
+            "pfcp.ie_type": "60",
+            "pfcp.ie_len": "5",
+            "pfcp.spare_h1": "0",
+            "pfcp.node_id_type": "0",
+            "pfcp.node_id_ipv4": "20.100.40.10"
+          },
+          "Cause : Request accepted(success)": {
+            "pfcp.ie_type": "19",
+            "pfcp.ie_len": "1",
+            "pfcp.cause": "1"
+          },
+          "Recovery Time Stamp : Dec  4, 2025 05:50:42.000000000 UTC": {
+            "pfcp.ie_type": "96",
+            "pfcp.ie_len": "4",
+            "pfcp.recovery_time_stamp": "2025-12-04T05:50:42.000000000Z"
+          },
+          "UP Function Features : ": {
+            "pfcp.ie_type": "43",
+            "pfcp.ie_len": "2",
+            "pfcp.up_function_features.treu": "0",
+            "pfcp.up_function_features.heeu": "0",
+            "pfcp.up_function_features.pfdm": "1",
+            "pfcp.up_function_features.ftup": "1",
+            "pfcp.up_function_features.trst": "0",
+            "pfcp.up_function_features.dlbd": "0",
+            "pfcp.up_function_features.ddnd": "0",
+            "pfcp.up_function_features.bucp": "0",
+            "pfcp.up_function_features.epfar": "0",
+            "pfcp.up_function_features.pfde": "0",
+            "pfcp.up_function_features.frrt": "0",
+            "pfcp.up_function_features.trace": "0",
+            "pfcp.up_function_features.quoac": "0",
+            "pfcp.up_function_features.udbc": "0",
+            "pfcp.up_function_features.pdiu": "0",
+            "pfcp.up_function_features.empu": "1"
+          },
+          "pfcp.response_to": "1",
+          "pfcp.response_time": "0.003332000"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:50:52.037510000Z",
+          "frame.time_utc": "2025-12-04T05:50:52.037510000Z",
+          "frame.time_epoch": "2025-12-04T05:50:52.037510000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "6.566843000",
+          "frame.time_delta_displayed": "6.566843000",
+          "frame.time_relative": "6.570175000",
+          "frame.number": "3",
+          "frame.len": "152",
+          "frame.cap_len": "152",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "138",
+          "ip.id": "0x6f97",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x5196",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.src_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.dst": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.dst_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "47862",
+          "udp.dstport": "8805",
+          "udp.port": "47862",
+          "udp.port": "8805",
+          "udp.length": "118",
+          "udp.checksum": "0x79bd",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "3",
+          "Timestamps": {
+            "udp.time_relative": "6.570175000",
+            "udp.time_delta": "6.566843000"
+          },
+          "udp.payload": "21:32:00:6a:00:00:00:00:00:00:00:00:00:00:01:00:00:3c:00:05:00:14:64:28:64:00:39:00:0d:02:00:00:00:00:00:00:00:01:14:64:28:64:00:01:00:25:00:38:00:02:07:d0:00:1d:00:04:00:00:00:00:00:02:00:0b:00:14:00:01:01:00:15:00:02:0c:01:00:6c:00:04:00:00:07:d0:00:03:00:17:00:6c:00:04:00:00:07:d0:00:2c:00:02:04:00:00:04:00:05:00:2a:00:01:00"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x21",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "1"
+          },
+          "pfcp.msg_type": "50",
+          "pfcp.length": "106",
+          "pfcp.seid": "0x0000000000000000",
+          "pfcp.seqno": "1",
+          "pfcp.spare_oct": "0",
+          "Node ID : IPv4 address: 20.100.40.100": {
+            "pfcp.ie_type": "60",
+            "pfcp.ie_len": "5",
+            "pfcp.spare_h1": "0",
+            "pfcp.node_id_type": "0",
+            "pfcp.node_id_ipv4": "20.100.40.100"
+          },
+          "F-SEID : SEID: 0x0000000000000001, IPv4 20.100.40.100": {
+            "pfcp.ie_type": "57",
+            "pfcp.ie_len": "13",
+            "pfcp.spare_b7": "0",
+            "pfcp.spare_b6": "0",
+            "pfcp.spare_b5": "0",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.spare_b2": "0",
+            "pfcp.f_seid_flags.v4": "1",
+            "pfcp.f_seid_flags.v6": "0",
+            "pfcp.seid": "0x0000000000000001",
+            "pfcp.f_seid.ipv4": "20.100.40.100"
+          },
+          "Create PDR : [Grouped IE]: PDR ID: 2000": {
+            "pfcp.ie_type": "1",
+            "pfcp.ie_len": "37",
+            "PDR ID : 2000": {
+              "pfcp.ie_type": "56",
+              "pfcp.ie_len": "2",
+              "pfcp.pdr_id": "2000"
+            },
+            "Precedence : 0": {
+              "pfcp.ie_type": "29",
+              "pfcp.ie_len": "4",
+              "pfcp.precedence": "0"
+            },
+            "PDI : [Grouped IE]": {
+              "pfcp.ie_type": "2",
+              "pfcp.ie_len": "11",
+              "Source Interface : Core": {
+                "pfcp.ie_type": "20",
+                "pfcp.ie_len": "1",
+                "pfcp.spare_h1": "0",
+                "pfcp.source_interface": "1"
+              },
+              "F-TEID : ": {
+                "pfcp.ie_type": "21",
+                "pfcp.ie_len": "2",
+                "pfcp.fteid_flg.spare": "0",
+                "pfcp.f_teid_flags.ch_id": "1",
+                "pfcp.f_teid_flags.ch": "1",
+                "pfcp.f_teid_flags.v6": "0",
+                "pfcp.f_teid_flags.v4": "0",
+                "pfcp.f_teid.choose_id": "01"
+              }
+            },
+            "FAR ID : Dynamic by CP 2000": {
+              "pfcp.ie_type": "108",
+              "pfcp.ie_len": "4",
+              "pfcp.far_id_flg": "0",
+              "pfcp.far_id": "2000"
+            }
+          },
+          "Create FAR : [Grouped IE]: FAR ID: Dynamic by CP 2000": {
+            "pfcp.ie_type": "3",
+            "pfcp.ie_len": "23",
+            "FAR ID : Dynamic by CP 2000": {
+              "pfcp.ie_type": "108",
+              "pfcp.ie_len": "4",
+              "pfcp.far_id_flg": "0",
+              "pfcp.far_id": "2000"
+            },
+            "Apply Action : ": {
+              "pfcp.ie_type": "44",
+              "pfcp.ie_len": "2",
+              "pfcp.apply_action.dfrt": "0",
+              "pfcp.apply_action.ipmd": "0",
+              "pfcp.apply_action.ipma": "0",
+              "pfcp.apply_action.dupl": "0",
+              "pfcp.apply_action.nocp": "0",
+              "pfcp.apply_action.buff": "1",
+              "pfcp.apply_action.forw": "0",
+              "pfcp.apply_action.drop": "0",
+              "pfcp.spare_b7_b5": "0",
+              "pfcp.apply_action.mbsu": "0",
+              "pfcp.apply_action.fssm": "0",
+              "pfcp.apply_action.ddpn": "0",
+              "pfcp.apply_action.bdpn": "0",
+              "pfcp.apply_action.edrt": "0"
+            },
+            "Forwarding Parameters : [Grouped IE]": {
+              "pfcp.ie_type": "4",
+              "pfcp.ie_len": "5",
+              "Destination Interface : Access": {
+                "pfcp.ie_type": "42",
+                "pfcp.ie_len": "1",
+                "pfcp.spare_h1": "0",
+                "pfcp.dst_interface": "0"
+              }
+            }
+          },
+          "pfcp.response_in": "4"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:50:52.047817000Z",
+          "frame.time_utc": "2025-12-04T05:50:52.047817000Z",
+          "frame.time_epoch": "2025-12-04T05:50:52.047817000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "0.010307000",
+          "frame.time_delta_displayed": "0.010307000",
+          "frame.time_relative": "6.580482000",
+          "frame.number": "4",
+          "frame.len": "112",
+          "frame.cap_len": "112",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "98",
+          "ip.id": "0xba8d",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x06c8",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.src_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.dst": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.dst_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "8805",
+          "udp.dstport": "47862",
+          "udp.port": "8805",
+          "udp.port": "47862",
+          "udp.length": "78",
+          "udp.checksum": "0x7995",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "4",
+          "Timestamps": {
+            "udp.time_relative": "6.580482000",
+            "udp.time_delta": "0.010307000"
+          },
+          "udp.payload": "21:33:00:42:00:00:00:00:00:00:00:01:00:00:01:00:00:3c:00:05:00:14:64:28:0a:00:13:00:01:01:00:39:00:0d:02:00:00:00:00:00:00:00:02:14:64:28:0a:00:08:00:13:00:38:00:02:07:d0:00:15:00:09:01:00:00:00:02:14:00:5a:0a"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x21",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "1"
+          },
+          "pfcp.msg_type": "51",
+          "pfcp.length": "66",
+          "pfcp.seid": "0x0000000000000001",
+          "pfcp.seqno": "1",
+          "pfcp.spare_oct": "0",
+          "Node ID : IPv4 address: 20.100.40.10": {
+            "pfcp.ie_type": "60",
+            "pfcp.ie_len": "5",
+            "pfcp.spare_h1": "0",
+            "pfcp.node_id_type": "0",
+            "pfcp.node_id_ipv4": "20.100.40.10"
+          },
+          "Cause : Request accepted(success)": {
+            "pfcp.ie_type": "19",
+            "pfcp.ie_len": "1",
+            "pfcp.cause": "1"
+          },
+          "F-SEID : SEID: 0x0000000000000002, IPv4 20.100.40.10": {
+            "pfcp.ie_type": "57",
+            "pfcp.ie_len": "13",
+            "pfcp.spare_b7": "0",
+            "pfcp.spare_b6": "0",
+            "pfcp.spare_b5": "0",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.spare_b2": "0",
+            "pfcp.f_seid_flags.v4": "1",
+            "pfcp.f_seid_flags.v6": "0",
+            "pfcp.seid": "0x0000000000000002",
+            "pfcp.f_seid.ipv4": "20.100.40.10"
+          },
+          "Created PDR : [Grouped IE]: PDR ID: 2000": {
+            "pfcp.ie_type": "8",
+            "pfcp.ie_len": "19",
+            "PDR ID : 2000": {
+              "pfcp.ie_type": "56",
+              "pfcp.ie_len": "2",
+              "pfcp.pdr_id": "2000"
+            },
+            "F-TEID : TEID: 0x00000002, IPv4 20.0.90.10": {
+              "pfcp.ie_type": "21",
+              "pfcp.ie_len": "9",
+              "pfcp.fteid_flg.spare": "0",
+              "pfcp.f_teid_flags.ch_id": "0",
+              "pfcp.f_teid_flags.ch": "0",
+              "pfcp.f_teid_flags.v6": "0",
+              "pfcp.f_teid_flags.v4": "1",
+              "pfcp.f_teid.teid": "0x00000002",
+              "pfcp.f_teid.ipv4_addr": "20.0.90.10"
+            }
+          },
+          "pfcp.response_to": "3",
+          "pfcp.response_time": "0.010307000"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:50:52.202895000Z",
+          "frame.time_utc": "2025-12-04T05:50:52.202895000Z",
+          "frame.time_epoch": "2025-12-04T05:50:52.202895000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "0.155078000",
+          "frame.time_delta_displayed": "0.155078000",
+          "frame.time_relative": "6.735560000",
+          "frame.number": "5",
+          "frame.len": "365",
+          "frame.cap_len": "365",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "351",
+          "ip.id": "0x6fb2",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x50a6",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.src_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.dst": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.dst_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "47862",
+          "udp.dstport": "8805",
+          "udp.port": "47862",
+          "udp.port": "8805",
+          "udp.length": "331",
+          "udp.checksum": "0x7a92",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "5",
+          "Timestamps": {
+            "udp.time_relative": "6.735560000",
+            "udp.time_delta": "0.155078000"
+          },
+          "udp.payload": "21:34:01:3f:00:00:00:00:00:00:00:02:00:00:02:00:00:01:00:6d:00:38:00:02:00:0b:00:1d:00:04:00:00:00:00:00:02:00:46:00:14:00:01:00:00:15:00:01:05:00:16:00:05:6e:33:2d:6e:77:00:17:00:2a:11:00:00:22:70:65:72:6d:69:74:20:6f:75:74:20:69:70:20:66:72:6f:6d:20:61:6e:79:20:74:6f:20:61:73:73:69:67:6e:65:64:00:00:00:01:00:7c:00:01:05:00:5f:00:01:00:00:6c:00:04:00:00:00:0b:00:6d:00:04:00:00:00:06:00:01:00:52:00:38:00:02:00:0c:00:1d:00:04:00:00:00:00:00:02:00:2b:00:14:00:01:01:00:15:00:01:05:00:16:00:05:6e:39:2d:6e:77:00:5d:00:05:06:ac:10:00:01:00:17:00:06:10:00:00:00:00:01:00:7c:00:01:05:00:5f:00:01:00:00:6c:00:04:00:00:00:0c:00:6d:00:04:00:00:00:06:00:03:00:2e:00:6c:00:04:00:00:00:0b:00:2c:00:02:02:00:00:04:00:1c:00:2a:00:01:01:00:16:00:05:6e:39:2d:6e:77:00:54:00:0a:01:00:00:00:00:01:14:00:5a:0b:00:03:00:20:00:6c:00:04:00:00:00:0c:00:2c:00:02:04:00:00:04:00:0e:00:2a:00:01:00:00:16:00:05:6e:33:2d:6e:77:00:07:00:12:00:6d:00:04:00:00:00:06:00:19:00:01:00:00:7c:00:01:05"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x21",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "1"
+          },
+          "pfcp.msg_type": "52",
+          "pfcp.length": "319",
+          "pfcp.seid": "0x0000000000000002",
+          "pfcp.seqno": "2",
+          "pfcp.spare_oct": "0",
+          "Create PDR : [Grouped IE]: PDR ID: 11": {
+            "pfcp.ie_type": "1",
+            "pfcp.ie_len": "109",
+            "PDR ID : 11": {
+              "pfcp.ie_type": "56",
+              "pfcp.ie_len": "2",
+              "pfcp.pdr_id": "11"
+            },
+            "Precedence : 0": {
+              "pfcp.ie_type": "29",
+              "pfcp.ie_len": "4",
+              "pfcp.precedence": "0"
+            },
+            "PDI : [Grouped IE]": {
+              "pfcp.ie_type": "2",
+              "pfcp.ie_len": "70",
+              "Source Interface : Access": {
+                "pfcp.ie_type": "20",
+                "pfcp.ie_len": "1",
+                "pfcp.spare_h1": "0",
+                "pfcp.source_interface": "0"
+              },
+              "F-TEID : ": {
+                "pfcp.ie_type": "21",
+                "pfcp.ie_len": "1",
+                "pfcp.fteid_flg.spare": "0",
+                "pfcp.f_teid_flags.ch_id": "0",
+                "pfcp.f_teid_flags.ch": "1",
+                "pfcp.f_teid_flags.v6": "0",
+                "pfcp.f_teid_flags.v4": "1"
+              },
+              "Network Instance : n3-nw": {
+                "pfcp.ie_type": "22",
+                "pfcp.ie_len": "5",
+                "pfcp.network_instance": "n3-nw"
+              },
+              "SDF Filter : ": {
+                "pfcp.ie_type": "23",
+                "pfcp.ie_len": "42",
+                "pfcp.spare_h1": "1",
+                "pfcp.sdf_filter.bid": "1",
+                "pfcp.sdf_filter.fl": "0",
+                "pfcp.sdf_filter.spi": "0",
+                "pfcp.sdf_filter.ttc": "0",
+                "pfcp.sdf_filter.fd": "1",
+                "pfcp.spare": "0",
+                "pfcp.flow_desc_len": "34",
+                "pfcp.flow_desc": "permit out ip from any to assigned",
+                "pfcp.sdf_filter_id": "1"
+              },
+              "QFI : ": {
+                "pfcp.ie_type": "124",
+                "pfcp.ie_len": "1",
+                "pfcp.spare_b7_b6": "0",
+                "pfcp.qfi_value": "0x05"
+              }
+            },
+            "Outer Header Removal : GTP-U/UDP/IPv4": {
+              "pfcp.ie_type": "95",
+              "pfcp.ie_len": "1",
+              "pfcp.out_hdr_desc": "0"
+            },
+            "FAR ID : Dynamic by CP 11": {
+              "pfcp.ie_type": "108",
+              "pfcp.ie_len": "4",
+              "pfcp.far_id_flg": "0",
+              "pfcp.far_id": "11"
+            },
+            "QER ID : Dynamic by CP 6": {
+              "pfcp.ie_type": "109",
+              "pfcp.ie_len": "4",
+              "pfcp.qer_id_flg": "0",
+              "pfcp.qer_id": "6"
+            }
+          },
+          "Create PDR : [Grouped IE]: PDR ID: 12": {
+            "pfcp.ie_type": "1",
+            "pfcp.ie_len": "82",
+            "PDR ID : 12": {
+              "pfcp.ie_type": "56",
+              "pfcp.ie_len": "2",
+              "pfcp.pdr_id": "12"
+            },
+            "Precedence : 0": {
+              "pfcp.ie_type": "29",
+              "pfcp.ie_len": "4",
+              "pfcp.precedence": "0"
+            },
+            "PDI : [Grouped IE]": {
+              "pfcp.ie_type": "2",
+              "pfcp.ie_len": "43",
+              "Source Interface : Core": {
+                "pfcp.ie_type": "20",
+                "pfcp.ie_len": "1",
+                "pfcp.spare_h1": "0",
+                "pfcp.source_interface": "1"
+              },
+              "F-TEID : ": {
+                "pfcp.ie_type": "21",
+                "pfcp.ie_len": "1",
+                "pfcp.fteid_flg.spare": "0",
+                "pfcp.f_teid_flags.ch_id": "0",
+                "pfcp.f_teid_flags.ch": "1",
+                "pfcp.f_teid_flags.v6": "0",
+                "pfcp.f_teid_flags.v4": "1"
+              },
+              "Network Instance : n9-nw": {
+                "pfcp.ie_type": "22",
+                "pfcp.ie_len": "5",
+                "pfcp.network_instance": "n9-nw"
+              },
+              "UE IP Address : ": {
+                "pfcp.ie_type": "93",
+                "pfcp.ie_len": "5",
+                "pfcp.spare_b7": "0",
+                "pfcp.ue_ip_address_flag.v6pl": "0",
+                "pfcp.ue_ip_address_flag.chv6": "0",
+                "pfcp.ue_ip_address_flag.chv4": "0",
+                "pfcp.ue_ip_address_flag.v6d": "0",
+                "pfcp.ue_ip_address_flag.sd": "1",
+                "pfcp.ue_ip_address_flag.v4": "1",
+                "pfcp.ue_ip_address_flag.v6": "0",
+                "pfcp.ue_ip_addr_ipv4": "172.16.0.1"
+              },
+              "SDF Filter : ": {
+                "pfcp.ie_type": "23",
+                "pfcp.ie_len": "6",
+                "pfcp.spare_h1": "1",
+                "pfcp.sdf_filter.bid": "1",
+                "pfcp.sdf_filter.fl": "0",
+                "pfcp.sdf_filter.spi": "0",
+                "pfcp.sdf_filter.ttc": "0",
+                "pfcp.sdf_filter.fd": "0",
+                "pfcp.spare": "0",
+                "pfcp.sdf_filter_id": "1"
+              },
+              "QFI : ": {
+                "pfcp.ie_type": "124",
+                "pfcp.ie_len": "1",
+                "pfcp.spare_b7_b6": "0",
+                "pfcp.qfi_value": "0x05"
+              }
+            },
+            "Outer Header Removal : GTP-U/UDP/IPv4": {
+              "pfcp.ie_type": "95",
+              "pfcp.ie_len": "1",
+              "pfcp.out_hdr_desc": "0"
+            },
+            "FAR ID : Dynamic by CP 12": {
+              "pfcp.ie_type": "108",
+              "pfcp.ie_len": "4",
+              "pfcp.far_id_flg": "0",
+              "pfcp.far_id": "12"
+            },
+            "QER ID : Dynamic by CP 6": {
+              "pfcp.ie_type": "109",
+              "pfcp.ie_len": "4",
+              "pfcp.qer_id_flg": "0",
+              "pfcp.qer_id": "6"
+            }
+          },
+          "Create FAR : [Grouped IE]: FAR ID: Dynamic by CP 11": {
+            "pfcp.ie_type": "3",
+            "pfcp.ie_len": "46",
+            "FAR ID : Dynamic by CP 11": {
+              "pfcp.ie_type": "108",
+              "pfcp.ie_len": "4",
+              "pfcp.far_id_flg": "0",
+              "pfcp.far_id": "11"
+            },
+            "Apply Action : ": {
+              "pfcp.ie_type": "44",
+              "pfcp.ie_len": "2",
+              "pfcp.apply_action.dfrt": "0",
+              "pfcp.apply_action.ipmd": "0",
+              "pfcp.apply_action.ipma": "0",
+              "pfcp.apply_action.dupl": "0",
+              "pfcp.apply_action.nocp": "0",
+              "pfcp.apply_action.buff": "0",
+              "pfcp.apply_action.forw": "1",
+              "pfcp.apply_action.drop": "0",
+              "pfcp.spare_b7_b5": "0",
+              "pfcp.apply_action.mbsu": "0",
+              "pfcp.apply_action.fssm": "0",
+              "pfcp.apply_action.ddpn": "0",
+              "pfcp.apply_action.bdpn": "0",
+              "pfcp.apply_action.edrt": "0"
+            },
+            "Forwarding Parameters : [Grouped IE]": {
+              "pfcp.ie_type": "4",
+              "pfcp.ie_len": "28",
+              "Destination Interface : Core": {
+                "pfcp.ie_type": "42",
+                "pfcp.ie_len": "1",
+                "pfcp.spare_h1": "0",
+                "pfcp.dst_interface": "1"
+              },
+              "Network Instance : n9-nw": {
+                "pfcp.ie_type": "22",
+                "pfcp.ie_len": "5",
+                "pfcp.network_instance": "n9-nw"
+              },
+              "Outer Header Creation : ": {
+                "pfcp.ie_type": "84",
+                "pfcp.ie_len": "10",
+                "pfcp.pfcp_outer_hdr_desc.stag": "0",
+                "pfcp.pfcp_outer_hdr_desc.ctag": "0",
+                "pfcp.pfcp_outer_hdr_desc.ipv6": "0",
+                "pfcp.pfcp_outer_hdr_desc.ipv4": "0",
+                "pfcp.pfcp_outer_hdr_desc.udp_ipv6": "0",
+                "pfcp.pfcp_outer_hdr_desc.udp_ipv4": "0",
+                "pfcp.pfcp_outer_hdr_desc.gtpu_udp_ipv6": "0",
+                "pfcp.pfcp_outer_hdr_desc.gtpu_udp_ipv4": "1",
+                "pfcp.pfcp_outer_hdr_desc.spare": "0",
+                "pfcp.pfcp_outer_hdr_desc.ssm_cteid": "0",
+                "pfcp.pfcp_outer_hdr_desc.n6": "0",
+                "pfcp.pfcp_outer_hdr_desc.n19": "0",
+                "pfcp.outer_hdr_creation.teid": "0x00000001",
+                "pfcp.outer_hdr_creation.ipv4": "20.0.90.11"
+              }
+            }
+          },
+          "Create FAR : [Grouped IE]: FAR ID: Dynamic by CP 12": {
+            "pfcp.ie_type": "3",
+            "pfcp.ie_len": "32",
+            "FAR ID : Dynamic by CP 12": {
+              "pfcp.ie_type": "108",
+              "pfcp.ie_len": "4",
+              "pfcp.far_id_flg": "0",
+              "pfcp.far_id": "12"
+            },
+            "Apply Action : ": {
+              "pfcp.ie_type": "44",
+              "pfcp.ie_len": "2",
+              "pfcp.apply_action.dfrt": "0",
+              "pfcp.apply_action.ipmd": "0",
+              "pfcp.apply_action.ipma": "0",
+              "pfcp.apply_action.dupl": "0",
+              "pfcp.apply_action.nocp": "0",
+              "pfcp.apply_action.buff": "1",
+              "pfcp.apply_action.forw": "0",
+              "pfcp.apply_action.drop": "0",
+              "pfcp.spare_b7_b5": "0",
+              "pfcp.apply_action.mbsu": "0",
+              "pfcp.apply_action.fssm": "0",
+              "pfcp.apply_action.ddpn": "0",
+              "pfcp.apply_action.bdpn": "0",
+              "pfcp.apply_action.edrt": "0"
+            },
+            "Forwarding Parameters : [Grouped IE]": {
+              "pfcp.ie_type": "4",
+              "pfcp.ie_len": "14",
+              "Destination Interface : Access": {
+                "pfcp.ie_type": "42",
+                "pfcp.ie_len": "1",
+                "pfcp.spare_h1": "0",
+                "pfcp.dst_interface": "0"
+              },
+              "Network Instance : n3-nw": {
+                "pfcp.ie_type": "22",
+                "pfcp.ie_len": "5",
+                "pfcp.network_instance": "n3-nw"
+              }
+            }
+          },
+          "Create QER : [Grouped IE]: QER ID: Dynamic by CP 6": {
+            "pfcp.ie_type": "7",
+            "pfcp.ie_len": "18",
+            "QER ID : Dynamic by CP 6": {
+              "pfcp.ie_type": "109",
+              "pfcp.ie_len": "4",
+              "pfcp.qer_id_flg": "0",
+              "pfcp.qer_id": "6"
+            },
+            "Gate Status : ": {
+              "pfcp.ie_type": "25",
+              "pfcp.ie_len": "1",
+              "pfcp.gate_status.ulgate": "0",
+              "pfcp.gate_status.dlgate": "0"
+            },
+            "QFI : ": {
+              "pfcp.ie_type": "124",
+              "pfcp.ie_len": "1",
+              "pfcp.spare_b7_b6": "0",
+              "pfcp.qfi_value": "0x05"
+            }
+          },
+          "pfcp.response_in": "6"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:50:52.203642000Z",
+          "frame.time_utc": "2025-12-04T05:50:52.203642000Z",
+          "frame.time_epoch": "2025-12-04T05:50:52.203642000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "0.000747000",
+          "frame.time_delta_displayed": "0.000747000",
+          "frame.time_relative": "6.736307000",
+          "frame.number": "6",
+          "frame.len": "109",
+          "frame.cap_len": "109",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "95",
+          "ip.id": "0xbaa4",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x06b4",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.src_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.dst": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.dst_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "8805",
+          "udp.dstport": "47862",
+          "udp.port": "8805",
+          "udp.port": "47862",
+          "udp.length": "75",
+          "udp.checksum": "0x7992",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "6",
+          "Timestamps": {
+            "udp.time_relative": "6.736307000",
+            "udp.time_delta": "0.000747000"
+          },
+          "udp.payload": "21:35:00:3f:00:00:00:00:00:00:00:01:00:00:02:00:00:13:00:01:01:00:08:00:13:00:38:00:02:00:0b:00:15:00:09:01:00:00:00:02:14:00:1e:0a:00:08:00:13:00:38:00:02:00:0c:00:15:00:09:01:00:00:00:02:14:00:5a:0a"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x21",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "1"
+          },
+          "pfcp.msg_type": "53",
+          "pfcp.length": "63",
+          "pfcp.seid": "0x0000000000000001",
+          "pfcp.seqno": "2",
+          "pfcp.spare_oct": "0",
+          "Cause : Request accepted(success)": {
+            "pfcp.ie_type": "19",
+            "pfcp.ie_len": "1",
+            "pfcp.cause": "1"
+          },
+          "Created PDR : [Grouped IE]: PDR ID: 11": {
+            "pfcp.ie_type": "8",
+            "pfcp.ie_len": "19",
+            "PDR ID : 11": {
+              "pfcp.ie_type": "56",
+              "pfcp.ie_len": "2",
+              "pfcp.pdr_id": "11"
+            },
+            "F-TEID : TEID: 0x00000002, IPv4 20.0.30.10": {
+              "pfcp.ie_type": "21",
+              "pfcp.ie_len": "9",
+              "pfcp.fteid_flg.spare": "0",
+              "pfcp.f_teid_flags.ch_id": "0",
+              "pfcp.f_teid_flags.ch": "0",
+              "pfcp.f_teid_flags.v6": "0",
+              "pfcp.f_teid_flags.v4": "1",
+              "pfcp.f_teid.teid": "0x00000002",
+              "pfcp.f_teid.ipv4_addr": "20.0.30.10"
+            }
+          },
+          "Created PDR : [Grouped IE]: PDR ID: 12": {
+            "pfcp.ie_type": "8",
+            "pfcp.ie_len": "19",
+            "PDR ID : 12": {
+              "pfcp.ie_type": "56",
+              "pfcp.ie_len": "2",
+              "pfcp.pdr_id": "12"
+            },
+            "F-TEID : TEID: 0x00000002, IPv4 20.0.90.10": {
+              "pfcp.ie_type": "21",
+              "pfcp.ie_len": "9",
+              "pfcp.fteid_flg.spare": "0",
+              "pfcp.f_teid_flags.ch_id": "0",
+              "pfcp.f_teid_flags.ch": "0",
+              "pfcp.f_teid_flags.v6": "0",
+              "pfcp.f_teid_flags.v4": "1",
+              "pfcp.f_teid.teid": "0x00000002",
+              "pfcp.f_teid.ipv4_addr": "20.0.90.10"
+            }
+          },
+          "pfcp.response_to": "5",
+          "pfcp.response_time": "0.000747000"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:50:52.232236000Z",
+          "frame.time_utc": "2025-12-04T05:50:52.232236000Z",
+          "frame.time_epoch": "2025-12-04T05:50:52.232236000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "0.028594000",
+          "frame.time_delta_displayed": "0.028594000",
+          "frame.time_relative": "6.764901000",
+          "frame.number": "7",
+          "frame.len": "94",
+          "frame.cap_len": "94",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "80",
+          "ip.id": "0x6fb6",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x51b1",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.src_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.dst": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.dst_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "47862",
+          "udp.dstport": "8805",
+          "udp.port": "47862",
+          "udp.port": "8805",
+          "udp.length": "60",
+          "udp.checksum": "0x7983",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "7",
+          "Timestamps": {
+            "udp.time_relative": "6.764901000",
+            "udp.time_delta": "0.028594000"
+          },
+          "udp.payload": "21:34:00:30:00:00:00:00:00:00:00:02:00:00:03:00:00:0a:00:20:00:6c:00:04:00:00:00:0c:00:2c:00:02:02:00:00:0b:00:0e:00:54:00:0a:01:00:00:00:00:01:14:00:03:0a"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x21",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "1"
+          },
+          "pfcp.msg_type": "52",
+          "pfcp.length": "48",
+          "pfcp.seid": "0x0000000000000002",
+          "pfcp.seqno": "3",
+          "pfcp.spare_oct": "0",
+          "Update FAR : [Grouped IE]: FAR ID: Dynamic by CP 12": {
+            "pfcp.ie_type": "10",
+            "pfcp.ie_len": "32",
+            "FAR ID : Dynamic by CP 12": {
+              "pfcp.ie_type": "108",
+              "pfcp.ie_len": "4",
+              "pfcp.far_id_flg": "0",
+              "pfcp.far_id": "12"
+            },
+            "Apply Action : ": {
+              "pfcp.ie_type": "44",
+              "pfcp.ie_len": "2",
+              "pfcp.apply_action.dfrt": "0",
+              "pfcp.apply_action.ipmd": "0",
+              "pfcp.apply_action.ipma": "0",
+              "pfcp.apply_action.dupl": "0",
+              "pfcp.apply_action.nocp": "0",
+              "pfcp.apply_action.buff": "0",
+              "pfcp.apply_action.forw": "1",
+              "pfcp.apply_action.drop": "0",
+              "pfcp.spare_b7_b5": "0",
+              "pfcp.apply_action.mbsu": "0",
+              "pfcp.apply_action.fssm": "0",
+              "pfcp.apply_action.ddpn": "0",
+              "pfcp.apply_action.bdpn": "0",
+              "pfcp.apply_action.edrt": "0"
+            },
+            "Update Forwarding Parameters : [Grouped IE]": {
+              "pfcp.ie_type": "11",
+              "pfcp.ie_len": "14",
+              "Outer Header Creation : ": {
+                "pfcp.ie_type": "84",
+                "pfcp.ie_len": "10",
+                "pfcp.pfcp_outer_hdr_desc.stag": "0",
+                "pfcp.pfcp_outer_hdr_desc.ctag": "0",
+                "pfcp.pfcp_outer_hdr_desc.ipv6": "0",
+                "pfcp.pfcp_outer_hdr_desc.ipv4": "0",
+                "pfcp.pfcp_outer_hdr_desc.udp_ipv6": "0",
+                "pfcp.pfcp_outer_hdr_desc.udp_ipv4": "0",
+                "pfcp.pfcp_outer_hdr_desc.gtpu_udp_ipv6": "0",
+                "pfcp.pfcp_outer_hdr_desc.gtpu_udp_ipv4": "1",
+                "pfcp.pfcp_outer_hdr_desc.spare": "0",
+                "pfcp.pfcp_outer_hdr_desc.ssm_cteid": "0",
+                "pfcp.pfcp_outer_hdr_desc.n6": "0",
+                "pfcp.pfcp_outer_hdr_desc.n19": "0",
+                "pfcp.outer_hdr_creation.teid": "0x00000001",
+                "pfcp.outer_hdr_creation.ipv4": "20.0.3.10"
+              }
+            }
+          },
+          "pfcp.response_in": "8"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:50:52.232525000Z",
+          "frame.time_utc": "2025-12-04T05:50:52.232525000Z",
+          "frame.time_epoch": "2025-12-04T05:50:52.232525000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "0.000289000",
+          "frame.time_delta_displayed": "0.000289000",
+          "frame.time_relative": "6.765190000",
+          "frame.number": "8",
+          "frame.len": "63",
+          "frame.cap_len": "63",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "49",
+          "ip.id": "0xbaa9",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x06dd",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.src_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.dst": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.dst_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "8805",
+          "udp.dstport": "47862",
+          "udp.port": "8805",
+          "udp.port": "47862",
+          "udp.length": "29",
+          "udp.checksum": "0x7964",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "8",
+          "Timestamps": {
+            "udp.time_relative": "6.765190000",
+            "udp.time_delta": "0.000289000"
+          },
+          "udp.payload": "21:35:00:11:00:00:00:00:00:00:00:01:00:00:03:00:00:13:00:01:01"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x21",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "1"
+          },
+          "pfcp.msg_type": "53",
+          "pfcp.length": "17",
+          "pfcp.seid": "0x0000000000000001",
+          "pfcp.seqno": "3",
+          "pfcp.spare_oct": "0",
+          "Cause : Request accepted(success)": {
+            "pfcp.ie_type": "19",
+            "pfcp.ie_len": "1",
+            "pfcp.cause": "1"
+          },
+          "pfcp.response_to": "7",
+          "pfcp.response_time": "0.000289000"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:51:22.297576000Z",
+          "frame.time_utc": "2025-12-04T05:51:22.297576000Z",
+          "frame.time_epoch": "2025-12-04T05:51:22.297576000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "30.065051000",
+          "frame.time_delta_displayed": "30.065051000",
+          "frame.time_relative": "36.830241000",
+          "frame.number": "9",
+          "frame.len": "80",
+          "frame.cap_len": "80",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "66",
+          "ip.id": "0x7b37",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x463e",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.src_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.dst": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.dst_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "47862",
+          "udp.dstport": "8805",
+          "udp.port": "47862",
+          "udp.port": "8805",
+          "udp.length": "46",
+          "udp.checksum": "0x7975",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "9",
+          "Timestamps": {
+            "udp.time_relative": "36.830241000",
+            "udp.time_delta": "30.065051000"
+          },
+          "udp.payload": "21:34:00:22:00:00:00:00:00:00:00:02:00:00:04:00:00:0f:00:06:00:38:00:02:00:0b:00:10:00:08:00:6c:00:04:00:00:00:0b"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x21",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "1"
+          },
+          "pfcp.msg_type": "52",
+          "pfcp.length": "34",
+          "pfcp.seid": "0x0000000000000002",
+          "pfcp.seqno": "4",
+          "pfcp.spare_oct": "0",
+          "Remove PDR : [Grouped IE]: PDR ID: 11": {
+            "pfcp.ie_type": "15",
+            "pfcp.ie_len": "6",
+            "PDR ID : 11": {
+              "pfcp.ie_type": "56",
+              "pfcp.ie_len": "2",
+              "pfcp.pdr_id": "11"
+            }
+          },
+          "Remove FAR : [Grouped IE]: FAR ID: Dynamic by CP 11": {
+            "pfcp.ie_type": "16",
+            "pfcp.ie_len": "8",
+            "FAR ID : Dynamic by CP 11": {
+              "pfcp.ie_type": "108",
+              "pfcp.ie_len": "4",
+              "pfcp.far_id_flg": "0",
+              "pfcp.far_id": "11"
+            }
+          },
+          "pfcp.response_in": "10"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:51:22.297666000Z",
+          "frame.time_utc": "2025-12-04T05:51:22.297666000Z",
+          "frame.time_epoch": "2025-12-04T05:51:22.297666000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "0.000090000",
+          "frame.time_delta_displayed": "0.000090000",
+          "frame.time_relative": "36.830331000",
+          "frame.number": "10",
+          "frame.len": "63",
+          "frame.cap_len": "63",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "49",
+          "ip.id": "0xbf59",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x022d",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.src_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.dst": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.dst_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "8805",
+          "udp.dstport": "47862",
+          "udp.port": "8805",
+          "udp.port": "47862",
+          "udp.length": "29",
+          "udp.checksum": "0x7964",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "10",
+          "Timestamps": {
+            "udp.time_relative": "36.830331000",
+            "udp.time_delta": "0.000090000"
+          },
+          "udp.payload": "21:35:00:11:00:00:00:00:00:00:00:01:00:00:04:00:00:13:00:01:01"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x21",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "1"
+          },
+          "pfcp.msg_type": "53",
+          "pfcp.length": "17",
+          "pfcp.seid": "0x0000000000000001",
+          "pfcp.seqno": "4",
+          "pfcp.spare_oct": "0",
+          "Cause : Request accepted(success)": {
+            "pfcp.ie_type": "19",
+            "pfcp.ie_len": "1",
+            "pfcp.cause": "1"
+          },
+          "pfcp.response_to": "9",
+          "pfcp.response_time": "0.000090000"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:51:22.377770000Z",
+          "frame.time_utc": "2025-12-04T05:51:22.377770000Z",
+          "frame.time_epoch": "2025-12-04T05:51:22.377770000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "0.080104000",
+          "frame.time_delta_displayed": "0.080104000",
+          "frame.time_relative": "36.910435000",
+          "frame.number": "11",
+          "frame.len": "58",
+          "frame.cap_len": "58",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "44",
+          "ip.id": "0x7b46",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x4645",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.src_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.dst": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.dst_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "47862",
+          "udp.dstport": "8805",
+          "udp.port": "47862",
+          "udp.port": "8805",
+          "udp.length": "24",
+          "udp.checksum": "0x795f",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "11",
+          "Timestamps": {
+            "udp.time_relative": "36.910435000",
+            "udp.time_delta": "0.080104000"
+          },
+          "udp.payload": "21:36:00:0c:00:00:00:00:00:00:00:02:00:00:05:00"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x21",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "1"
+          },
+          "pfcp.msg_type": "54",
+          "pfcp.length": "12",
+          "pfcp.seid": "0x0000000000000002",
+          "pfcp.seqno": "5",
+          "pfcp.spare_oct": "0",
+          "pfcp.response_in": "12"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:51:22.377833000Z",
+          "frame.time_utc": "2025-12-04T05:51:22.377833000Z",
+          "frame.time_epoch": "2025-12-04T05:51:22.377833000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "0.000063000",
+          "frame.time_delta_displayed": "0.000063000",
+          "frame.time_relative": "36.910498000",
+          "frame.number": "12",
+          "frame.len": "63",
+          "frame.cap_len": "63",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "49",
+          "ip.id": "0xbf5a",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x022c",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.src_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.dst": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.dst_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "8805",
+          "udp.dstport": "47862",
+          "udp.port": "8805",
+          "udp.port": "47862",
+          "udp.length": "29",
+          "udp.checksum": "0x7964",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "12",
+          "Timestamps": {
+            "udp.time_relative": "36.910498000",
+            "udp.time_delta": "0.000063000"
+          },
+          "udp.payload": "21:37:00:11:00:00:00:00:00:00:00:01:00:00:05:00:00:13:00:01:01"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x21",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "1"
+          },
+          "pfcp.msg_type": "55",
+          "pfcp.length": "17",
+          "pfcp.seid": "0x0000000000000001",
+          "pfcp.seqno": "5",
+          "pfcp.spare_oct": "0",
+          "Cause : Request accepted(success)": {
+            "pfcp.ie_type": "19",
+            "pfcp.ie_len": "1",
+            "pfcp.cause": "1"
+          },
+          "pfcp.response_to": "11",
+          "pfcp.response_time": "0.000063000"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:51:23.024463000Z",
+          "frame.time_utc": "2025-12-04T05:51:23.024463000Z",
+          "frame.time_epoch": "2025-12-04T05:51:23.024463000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "0.646630000",
+          "frame.time_delta_displayed": "0.646630000",
+          "frame.time_relative": "37.557128000",
+          "frame.number": "13",
+          "frame.len": "59",
+          "frame.cap_len": "59",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "45",
+          "ip.id": "0x7b74",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x4616",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.src_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.dst": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.dst_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "47862",
+          "udp.dstport": "8805",
+          "udp.port": "47862",
+          "udp.port": "8805",
+          "udp.length": "25",
+          "udp.checksum": "0x7960",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "13",
+          "Timestamps": {
+            "udp.time_relative": "37.557128000",
+            "udp.time_delta": "0.646630000"
+          },
+          "udp.payload": "20:09:00:0d:00:00:06:00:00:3c:00:05:00:14:64:28:64"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x20",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "0"
+          },
+          "pfcp.msg_type": "9",
+          "pfcp.length": "13",
+          "pfcp.seqno": "6",
+          "pfcp.spare_oct": "0",
+          "Node ID : IPv4 address: 20.100.40.100": {
+            "pfcp.ie_type": "60",
+            "pfcp.ie_len": "5",
+            "pfcp.spare_h1": "0",
+            "pfcp.node_id_type": "0",
+            "pfcp.node_id_ipv4": "20.100.40.100"
+          },
+          "pfcp.response_in": "14"
+        }
+      }
+    }
+  },
+  {
+    "_index": "packets-2025-12-04",
+    "_score": null,
+    "_source": {
+      "layers": {
+        "frame": {
+          "frame.encap_type": "1",
+          "frame.time": "2025-12-04T05:51:23.024528000Z",
+          "frame.time_utc": "2025-12-04T05:51:23.024528000Z",
+          "frame.time_epoch": "2025-12-04T05:51:23.024528000Z",
+          "frame.offset_shift": "0.000000000",
+          "frame.time_delta": "0.000065000",
+          "frame.time_delta_displayed": "0.000065000",
+          "frame.time_relative": "37.557193000",
+          "frame.number": "14",
+          "frame.len": "64",
+          "frame.cap_len": "64",
+          "frame.marked": "0",
+          "frame.ignored": "0",
+          "frame.protocols": "eth:ethertype:ip:udp:pfcp",
+          "frame.encoding": "0",
+          "frame.coloring_rule.name": "UDP",
+          "frame.coloring_rule.string": "udp"
+        },
+        "eth": {
+          "eth.dst": "00:00:00:00:00:00",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:00_00:00:00",
+            "eth.dst.oui": "0",
+            "eth.dst.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.dst.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.src": "00:00:00:00:00:00",
+          "eth.src_tree": {
+            "eth.src_resolved": "00:00:00_00:00:00",
+            "eth.src.oui": "0",
+            "eth.src.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.src.lg": "0",
+            "eth.src.ig": "0",
+            "eth.addr": "00:00:00:00:00:00",
+            "eth.addr_resolved": "00:00:00_00:00:00",
+            "eth.addr.oui": "0",
+            "eth.addr.oui_resolved": "Officially Xerox, but 0:0:0:0:0:0 is more common",
+            "eth.lg": "0",
+            "eth.ig": "0"
+          },
+          "eth.type": "0x0800",
+          "eth.stream": "0"
+        },
+        "ip": {
+          "ip.version": "4",
+          "ip.hdr_len": "20",
+          "ip.dsfield": "0x00",
+          "ip.dsfield_tree": {
+            "ip.dsfield.dscp": "0",
+            "ip.dsfield.ecn": "0"
+          },
+          "ip.len": "50",
+          "ip.id": "0xbf63",
+          "ip.flags": "0x02",
+          "ip.flags_tree": {
+            "ip.flags.rb": "0",
+            "ip.flags.df": "1",
+            "ip.flags.mf": "0"
+          },
+          "ip.frag_offset": "0",
+          "ip.ttl": "64",
+          "ip.proto": "17",
+          "ip.checksum": "0x0222",
+          "ip.checksum.status": "2",
+          "ip.src": "20.100.40.10",
+          "ip.addr": "20.100.40.10",
+          "ip.src_host": "20.100.40.10",
+          "ip.host": "20.100.40.10",
+          "ip.dst": "20.100.40.100",
+          "ip.addr": "20.100.40.100",
+          "ip.dst_host": "20.100.40.100",
+          "ip.host": "20.100.40.100",
+          "ip.stream": "0"
+        },
+        "udp": {
+          "udp.srcport": "8805",
+          "udp.dstport": "47862",
+          "udp.port": "8805",
+          "udp.port": "47862",
+          "udp.length": "30",
+          "udp.checksum": "0x7965",
+          "udp.checksum.status": "2",
+          "udp.stream": "0",
+          "udp.stream.pnum": "14",
+          "Timestamps": {
+            "udp.time_relative": "37.557193000",
+            "udp.time_delta": "0.000065000"
+          },
+          "udp.payload": "20:0a:00:12:00:00:06:00:00:3c:00:05:00:14:64:28:0a:00:13:00:01:01"
+        },
+        "pfcp": {
+          "pfcp.flags": "0x20",
+          "pfcp.flags_tree": {
+            "pfcp.version": "1",
+            "pfcp.spare_b4": "0",
+            "pfcp.spare_b3": "0",
+            "pfcp.fo_flag": "0",
+            "pfcp.mp_flag": "0",
+            "pfcp.s": "0"
+          },
+          "pfcp.msg_type": "10",
+          "pfcp.length": "18",
+          "pfcp.seqno": "6",
+          "pfcp.spare_oct": "0",
+          "Node ID : IPv4 address: 20.100.40.10": {
+            "pfcp.ie_type": "60",
+            "pfcp.ie_len": "5",
+            "pfcp.spare_h1": "0",
+            "pfcp.node_id_type": "0",
+            "pfcp.node_id_ipv4": "20.100.40.10"
+          },
+          "Cause : Request accepted(success)": {
+            "pfcp.ie_type": "19",
+            "pfcp.ie_len": "1",
+            "pfcp.cause": "1"
+          },
+          "pfcp.response_to": "13",
+          "pfcp.response_time": "0.000065000"
+        }
+      }
+    }
+  }
+]

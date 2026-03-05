@@ -1,0 +1,25 @@
+[
+  {
+    "name": "keysight_n9_establishment",
+    "type": "establishment",
+    "establishment": {
+      "SEID": 0,
+      "Fields": {
+        "pfcp": {
+          "msg_type": 50,
+          "seid": 0,
+          "f_seid": {
+            "seid": 1,
+            "ipv4": "20.100.40.100"
+          }
+        }
+      }
+    },
+    "expected_state": {
+      "SEID": 1,
+      "PDRs": {},
+      "FARs": {},
+      "QERs": {}
+    }
+  }
+]
