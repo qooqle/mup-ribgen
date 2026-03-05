@@ -132,7 +132,10 @@ func (m *Manager) Len() int {
 // synthesize creates a BGPRIBInfo by merging SessionInformation and StaticContext.
 func (m *Manager) synthesize(info *SessionInformation, now time.Time) (*BGPRIBInfo, error) {
 	if info.NetworkInstance == "" {
-		return nil, fmt.Errorf("ir: empty NetworkInstance in session SEID=%d", info.SEID)
+		// After a bare Establishment Request, the session state has no PDRs/FARs yet
+		// so NetworkInstance is not yet known. The caller should retry on the first
+		// Modification event, which will carry the actual network instance.
+		return nil, fmt.Errorf("ir: NetworkInstance not yet known for SEID=%d (will populate on modification)", info.SEID)
 	}
 
 	ctx, err := m.sctx.GetContext(info.NetworkInstance)

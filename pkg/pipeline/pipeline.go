@@ -32,7 +32,10 @@ func ConnectMode1ToIR(ctx context.Context, ctrl *mode1.Controller, irMgr *ir.Man
 					continue
 				}
 				if err := irMgr.HandleCreate(ev.Info); err != nil {
-					slog.Warn("pipeline: IR create failed",
+					// NetworkInstance may be empty right after establishment
+					// (before the first Modification populates PDRs/FARs).
+					// This is expected; the entry will be created on modification.
+					slog.Debug("pipeline: IR create skipped (no static ctx yet)",
 						"seid", ev.SEID, "err", err)
 				}
 			case "modification":

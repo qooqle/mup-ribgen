@@ -126,6 +126,20 @@ func (c *Controller) handlePacket(pkt *pfcp.RawPacket) {
 		}
 		c.emit(&SessionEvent{Info: info, SEID: info.SEID, Type: "modification"})
 
+	case pfcp.MsgTypeSessionEstablishmentResponse:
+		// In passive sniffing mode we observe both request and response.
+		// The response header carries cpSEID; the F-SEID IE carries upSEID.
+		// Register the alias so subsequent Modification/Deletion (which use upSEID) resolve correctly.
+		cpSEID := msg.SEID
+		if pfcpFields, ok := msg.Fields["pfcp"].(map[string]interface{}); ok {
+			if fSEID, ok := pfcpFields["f_seid"].(map[string]interface{}); ok {
+				if upSEID, ok := fSEID["seid"].(uint64); ok && upSEID != 0 {
+					c.sm.RegisterSEIDAlias(upSEID, cpSEID)
+					slog.Debug("mode1: SEID alias registered", "cp_seid", cpSEID, "up_seid", upSEID)
+				}
+			}
+		}
+
 	case pfcp.MsgTypeSessionDeletionRequest:
 		req := msg.ToDeletionRequest()
 		c.sm.HandleDeletion(req)

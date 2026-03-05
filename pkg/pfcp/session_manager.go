@@ -25,6 +25,7 @@ type Transformer interface {
 type SessionManager struct {
 	mu          sync.RWMutex
 	sessions    map[uint64]*PFCPSessionState
+	seidAliases map[uint64]uint64 // upSEID → cpSEID (from Establishment Response)
 	transformer Transformer
 }
 
@@ -32,8 +33,34 @@ type SessionManager struct {
 func NewSessionManager(transformer Transformer) *SessionManager {
 	return &SessionManager{
 		sessions:    make(map[uint64]*PFCPSessionState),
+		seidAliases: make(map[uint64]uint64),
 		transformer: transformer,
 	}
+}
+
+// RegisterSEIDAlias registers upSEID as an alias for cpSEID.
+// Called when an Establishment Response is observed (passive sniffing).
+// This enables subsequent Modification/Deletion requests (which carry upSEID)
+// to be resolved to the session stored under cpSEID.
+func (m *SessionManager) RegisterSEIDAlias(upSEID, cpSEID uint64) {
+	if upSEID == 0 || upSEID == cpSEID {
+		return
+	}
+	m.mu.Lock()
+	m.seidAliases[upSEID] = cpSEID
+	m.mu.Unlock()
+}
+
+// resolveSEID returns the canonical (CP) SEID for a given SEID,
+// following the alias chain if necessary.
+func (m *SessionManager) resolveSEID(seid uint64) uint64 {
+	m.mu.RLock()
+	if cpSEID, ok := m.seidAliases[seid]; ok {
+		m.mu.RUnlock()
+		return cpSEID
+	}
+	m.mu.RUnlock()
+	return seid
 }
 
 // HandleEstablishment processes a PFCP Session Establishment Request (req 2.3).
@@ -53,8 +80,9 @@ func (m *SessionManager) HandleEstablishment(req *PFCPEstablishmentRequest) (*ir
 // Merges the delta into the existing session state and returns updated SessionInformation.
 // Returns an error if no session state exists for the given SEID (req 2.9).
 func (m *SessionManager) HandleModification(req *PFCPModificationRequest) (*ir.SessionInformation, error) {
+	canonical := m.resolveSEID(req.SEID)
 	m.mu.RLock()
-	state, ok := m.sessions[req.SEID]
+	state, ok := m.sessions[canonical]
 	m.mu.RUnlock()
 	if !ok {
 		return nil, fmt.Errorf("session manager: modification without establishment for SEID %d", req.SEID)
@@ -68,7 +96,7 @@ func (m *SessionManager) HandleModification(req *PFCPModificationRequest) (*ir.S
 	state.LastModified = time.Now()
 
 	m.mu.Lock()
-	m.sessions[req.SEID] = state
+	m.sessions[canonical] = state
 	m.mu.Unlock()
 	return m.transformer.StateToSessionInfo(state)
 }
@@ -76,8 +104,9 @@ func (m *SessionManager) HandleModification(req *PFCPModificationRequest) (*ir.S
 // HandleDeletion processes a PFCP Session Deletion Request (req 2.5).
 // Removes the session state for the given SEID; safe to call even if SEID is unknown.
 func (m *SessionManager) HandleDeletion(req *PFCPDeletionRequest) {
+	canonical := m.resolveSEID(req.SEID)
 	m.mu.Lock()
-	delete(m.sessions, req.SEID)
+	delete(m.sessions, canonical)
 	m.mu.Unlock()
 }
 
