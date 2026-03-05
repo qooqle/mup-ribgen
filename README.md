@@ -183,6 +183,110 @@ Ctrl+C
 
 ---
 
+## デプロイメントガイド
+
+### システム要件
+
+| 項目 | 要件 |
+|---|---|
+| OS | Linux（推奨）、macOS |
+| Go | 1.24 以上 |
+| libpcap | ライブキャプチャ使用時のみ（`apt install libpcap-dev` / `brew install libpcap`）|
+| メモリ | 10,000 セッション管理時: 2 GB 以下 |
+| CPU | 通常動作時 50% 以下（4 コア CPU 想定）|
+| ネットワーク | GoBGP デーモンへの gRPC 通信（デフォルト: 50051/tcp）|
+
+### インストール
+
+```sh
+# バイナリビルド（バージョン情報を埋め込む）
+make build VERSION=v1.0.0
+
+# または GitHub Releases からダウンロード（将来対応予定）
+tar -xzf mup-ribgen-v1.0.0-linux-amd64.tar.gz
+sudo install -m 755 mup-ribgen /usr/local/bin/
+sudo install -m 755 dslc /usr/local/bin/
+```
+
+### GoBGP 統合セットアップ
+
+1. GoBGP をインストール・起動します:
+
+```sh
+# GoBGP インストール
+go install github.com/osrg/gobgp/v3/cmd/gobgpd@latest
+
+# gobgpd.conf（最小設定）
+cat > gobgpd.conf << 'EOF'
+[global.config]
+  as = 65000
+  router-id = "192.168.1.1"
+
+[[neighbors]]
+  [neighbors.config]
+    neighbor-address = "192.168.1.2"
+    peer-as = 65001
+
+[[defined-sets.prefix-sets]]
+  prefix-set-name = "mup-prefixes"
+
+[[mrt-dump]]
+EOF
+
+gobgpd -f gobgpd.conf
+```
+
+2. mup-ribgen の設定ファイルを作成します:
+
+```json
+{
+  "mode1_enabled": true,
+  "dialect": "Keysight_N9",
+  "log_level": "INFO",
+  "static_context_file": "/etc/mup-ribgen/static_context.json",
+  "gobgp_address": "127.0.0.1:50051",
+  "pfcp_interface": "eth0"
+}
+```
+
+3. 起動します:
+
+```sh
+sudo mup-ribgen --config /etc/mup-ribgen/config.json
+```
+
+### ネットワーク設定
+
+- **Mode 1**: mup-ribgen はネットワーク的に SMF と UPF の間に配置するか、またはミラーポートに接続します。PFCP トラフィックをパッシブに受信するだけで、転送には影響しません。
+- **必要なポート**: GoBGP gRPC 50051/tcp（ローカル接続）、PFCP 8805/udp（スニッフィング対象）
+
+### セキュリティ考慮事項
+
+- **最小権限**: ライブキャプチャには `CAP_NET_RAW` ケーパビリティが必要。root での常駐運用は避け、systemd の `AmbientCapabilities=CAP_NET_RAW` を使用してください。
+- **設定ファイルの保護**: `static_context.json` には RD/RT などの BGP 設定が含まれるため、権限を `0600` に設定してください。
+- **ネットワーク分離**: GoBGP との通信はローカルループバック推奨。リモート接続する場合は TLS を検討してください。
+
+### systemd サービス例
+
+```ini
+[Unit]
+Description=MUP RIB Generator
+After=network.target gobgpd.service
+
+[Service]
+Type=simple
+User=mupribgen
+AmbientCapabilities=CAP_NET_RAW
+ExecStart=/usr/local/bin/mup-ribgen --config /etc/mup-ribgen/config.json
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+---
+
 ## 開発者ガイド
 
 ### アーキテクチャ

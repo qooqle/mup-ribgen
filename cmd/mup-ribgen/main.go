@@ -6,12 +6,11 @@
 //	# dry-run from PCAP file (no GoBGP needed):
 //	mup-ribgen --pcap sample/Keysight/pfcp-n9.pcap \
 //	           --static-context static_context.json \
-//	           --dialect keysight_n9 --dry-run
+//	           --dialect Keysight_N9 --dry-run
 //
 //	# live sniffing + send to GoBGP:
 //	mup-ribgen --interface eth0 \
-//	           --static-context static_context.json \
-//	           --dialect keysight_n9 \
+//	           --config config.json \
 //	           --gobgp-addr 127.0.0.1:50051 --route-type type1
 package main
 
@@ -31,6 +30,7 @@ import (
 	_ "github.com/qooqle/mup-ribgen/pkg/dialect"
 
 	"github.com/qooqle/mup-ribgen/pkg/bgp"
+	"github.com/qooqle/mup-ribgen/pkg/config"
 	"github.com/qooqle/mup-ribgen/pkg/dialect"
 	"github.com/qooqle/mup-ribgen/pkg/ir"
 	"github.com/qooqle/mup-ribgen/pkg/mode1"
@@ -39,25 +39,73 @@ import (
 	"github.com/qooqle/mup-ribgen/pkg/staticctx"
 )
 
+// version is set at build time via -ldflags="-X main.version=vX.Y.Z".
+var version = "dev"
+
 func main() {
 	// --- flags ---------------------------------------------------------------
 	var (
+		flagConfig        = flag.String("config", "", "main config file path (req 11.2; default: ./config.json)")
 		flagPCAP          = flag.String("pcap", "", "PCAP file to replay (Mode 1, no live capture)")
 		flagInterface     = flag.String("interface", "", "network interface to sniff (live Mode 1)")
-		flagStaticCtx     = flag.String("static-context", "static_context.json", "static context JSON config")
-		flagDialect       = flag.String("dialect", "Keysight_N9", "PFCP dialect transformer name")
+		flagStaticCtx     = flag.String("static-context", "", "static context JSON config (overrides config file)")
+		flagDialect       = flag.String("dialect", "", "PFCP dialect transformer name (overrides config file)")
 		flagDryRun        = flag.Bool("dry-run", false, "print BGP routes instead of sending to GoBGP")
-		flagGoBGPAddr     = flag.String("gobgp-addr", "127.0.0.1:50051", "GoBGP daemon gRPC address (host:port)")
+		flagGoBGPAddr     = flag.String("gobgp-addr", "", "GoBGP daemon gRPC address host:port (overrides config file)")
 		flagRouteType     = flag.String("route-type", "type1", "MUP SAFI route type: type1 or type2")
-		flagLogLevel      = flag.String("log-level", "info", "log level: debug, info, warn, error")
+		flagLogLevel      = flag.String("log-level", "", "log level: debug, info, warn, error (overrides config file)")
 		flagVersion       = flag.Bool("version", false, "print version and exit")
 		flagChannelBuffer = flag.Int("channel-buffer", 128, "event channel buffer size")
 	)
 	flag.Parse()
 
 	if *flagVersion {
-		fmt.Println("mup-ribgen version dev")
+		fmt.Println("mup-ribgen version", version)
 		os.Exit(0)
+	}
+
+	// --- config file (req 11.2, 11.3, 1.5) ----------------------------------
+	// Track which flags were explicitly set on the command line.
+	explicit := map[string]bool{}
+	flag.Visit(func(f *flag.Flag) { explicit[f.Name] = true })
+
+	cfg, cfgErr := config.Load(*flagConfig)
+	if cfgErr != nil && *flagConfig != "" {
+		// Non-empty --config that fails to load is fatal (req 9.6).
+		fmt.Fprintf(os.Stderr, "mup-ribgen: %v\n", cfgErr)
+		os.Exit(1)
+	}
+	if cfg != nil {
+		// Apply config file values for flags that were not explicitly set.
+		if !explicit["log-level"] && cfg.LogLevel != "" {
+			*flagLogLevel = cfg.LogLevel
+		}
+		if !explicit["dialect"] && cfg.Dialect != "" {
+			*flagDialect = cfg.Dialect
+		}
+		if !explicit["gobgp-addr"] && cfg.GoBGPAddress != "" {
+			*flagGoBGPAddr = cfg.GoBGPAddress
+		}
+		if !explicit["static-context"] && cfg.StaticContextFile != "" {
+			*flagStaticCtx = cfg.StaticContextFile
+		}
+		if !explicit["interface"] && cfg.PFCPInterface != "" {
+			*flagInterface = cfg.PFCPInterface
+		}
+	}
+
+	// Apply hardcoded defaults for values still unset after config load.
+	if *flagLogLevel == "" {
+		*flagLogLevel = "info"
+	}
+	if *flagDialect == "" {
+		*flagDialect = "Keysight_N9"
+	}
+	if *flagGoBGPAddr == "" {
+		*flagGoBGPAddr = "127.0.0.1:50051"
+	}
+	if *flagStaticCtx == "" {
+		*flagStaticCtx = "static_context.json"
 	}
 
 	// --- logger --------------------------------------------------------------
@@ -82,10 +130,10 @@ func main() {
 	}
 	slog.Info("static context loaded", "path", *flagStaticCtx)
 
-	// --- dialect transformer -------------------------------------------------
+	// --- dialect transformer (req 11.7, 11.8) --------------------------------
 	transformer, err := dialect.Lookup(*flagDialect)
 	if err != nil {
-		slog.Error("dialect not found", "dialect", *flagDialect,
+		slog.Error("dialect not found (req 11.8)", "dialect", *flagDialect,
 			"available", dialect.Registered())
 		os.Exit(1)
 	}
