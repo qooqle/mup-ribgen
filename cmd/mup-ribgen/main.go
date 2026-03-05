@@ -21,8 +21,10 @@ import (
 	"flag"
 	"fmt"
 	"log/slog"
+	"net"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	// blank import to register all compiled dialect transformers
@@ -229,12 +231,15 @@ func setupLogger(level string) {
 func parseAddr(addr string) (host string, port int) {
 	host = "127.0.0.1"
 	port = 50051
-	fmt.Sscanf(addr, "%s", &addr)
-	var h string
-	var p int
-	if n, _ := fmt.Sscanf(addr, "%[^:]:%d", &h, &p); n == 2 {
-		host = h
-		port = p
+	h, p, err := net.SplitHostPort(addr)
+	if err != nil {
+		return
 	}
+	n, err := strconv.Atoi(p)
+	if err != nil {
+		return
+	}
+	host = h
+	port = n
 	return
 }
