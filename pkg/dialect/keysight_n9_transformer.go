@@ -4,6 +4,7 @@
 package dialect
 
 import (
+	"fmt"
 	"sort"
 	"time"
 
@@ -265,6 +266,8 @@ func (t *KeysightN9Transformer) StateToSessionInfos(state *pfcp.PFCPSessionState
 			}
 		}
 		info.QFI = qfiForFAR(state, farID)
+		info.FARID = farID
+		info.RouteKey = fmt.Sprintf("%d:%d", state.SEID, farID)
 		infos = append(infos, &info)
 	}
 	return infos, nil

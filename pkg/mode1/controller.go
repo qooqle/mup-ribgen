@@ -112,20 +112,30 @@ func (c *Controller) handlePacket(pkt *pfcp.RawPacket) {
 
 	switch msg.Type {
 	case pfcp.MsgTypeSessionEstablishmentRequest:
-		info, err := c.sm.HandleEstablishment(msg.ToEstablishmentRequest())
+		infos, err := c.sm.HandleEstablishmentInfos(msg.ToEstablishmentRequest())
 		if err != nil {
 			slog.Warn("mode1: establishment error", "seid", msg.SEID, "err", err)
 			return
 		}
-		c.emit(&SessionEvent{Info: info, SEID: info.SEID, Type: "establishment"})
+		for _, info := range infos {
+			if info == nil {
+				continue
+			}
+			c.emit(&SessionEvent{Info: info, SEID: info.SEID, Type: "establishment"})
+		}
 
 	case pfcp.MsgTypeSessionModificationRequest:
-		info, err := c.sm.HandleModification(msg.ToModificationRequest())
+		infos, err := c.sm.HandleModificationInfos(msg.ToModificationRequest())
 		if err != nil {
 			slog.Warn("mode1: modification error", "seid", msg.SEID, "err", err)
 			return
 		}
-		c.emit(&SessionEvent{Info: info, SEID: info.SEID, Type: "modification"})
+		for _, info := range infos {
+			if info == nil {
+				continue
+			}
+			c.emit(&SessionEvent{Info: info, SEID: info.SEID, Type: "modification"})
+		}
 
 	case pfcp.MsgTypeSessionEstablishmentResponse:
 		// In passive sniffing mode we observe both request and response.
@@ -144,7 +154,9 @@ func (c *Controller) handlePacket(pkt *pfcp.RawPacket) {
 	case pfcp.MsgTypeSessionDeletionRequest:
 		req := msg.ToDeletionRequest()
 		c.sm.HandleDeletion(req)
-		c.emit(&SessionEvent{SEID: req.SEID, Type: "deletion"})
+		canonical := c.sm.CanonicalSEID(req.SEID)
+		slog.Info("mode1: deletion request", "seid", req.SEID, "canonical_seid", canonical)
+		c.emit(&SessionEvent{SEID: canonical, Type: "deletion"})
 
 	default:
 		// heartbeats, association messages, responses – ignored

@@ -1,6 +1,8 @@
 [
   {
     "SEID": 1,
+    "RouteKey": "",
+    "FARID": 0,
     "UEIPAddress": "",
     "NetworkInstance": "",
     "EndpointAddress": "",
@@ -10,6 +12,8 @@
   },
   {
     "SEID": 1,
+    "RouteKey": "1:11",
+    "FARID": 11,
     "UEIPAddress": "172.16.0.1",
     "NetworkInstance": "n9-nw",
     "EndpointAddress": "20.0.90.11",
@@ -19,6 +23,8 @@
   },
   {
     "SEID": 1,
+    "RouteKey": "1:11",
+    "FARID": 11,
     "UEIPAddress": "172.16.0.1",
     "NetworkInstance": "n9-nw",
     "EndpointAddress": "20.0.90.11",
@@ -28,6 +34,8 @@
   },
   {
     "SEID": 1,
+    "RouteKey": "1:12",
+    "FARID": 12,
     "UEIPAddress": "172.16.0.1",
     "NetworkInstance": "n3-nw",
     "EndpointAddress": "20.0.3.10",

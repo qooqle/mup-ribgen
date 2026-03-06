@@ -74,6 +74,8 @@
         }
       },
       "expected_session_info": {
+        "RouteKey": "1:11",
+        "FARID": 11,
         "SEID": 1,
         "UEIPAddress": "172.16.0.1",
         "NetworkInstance": "n9-nw",
