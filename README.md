@@ -117,7 +117,7 @@ OPTIONS:
   --interface IFACE        ライブキャプチャのネットワークインターフェース
   --static-context FILE    Static Context JSON ファイルのパス（デフォルト: static_context.json）
   --dialect NAME           PFCP 方言トランスフォーマー名（デフォルト: Keysight_N9）
-  --route-type TYPE        MUP SAFI ルートタイプ: type1 または type2（デフォルト: type1）
+  --route-type TYPE        MUP SAFI ルートタイプ: type1 / type2 / both（デフォルト: both）
   --gobgp-addr HOST:PORT   GoBGP デーモンの gRPC アドレス（デフォルト: 127.0.0.1:50051）
   --dry-run                BGP ルートを GoBGP に送信せず stdout に出力
   --log-level LEVEL        ログレベル: debug, info, warn, error（デフォルト: info）
@@ -143,7 +143,7 @@ mup-ribgen \
 出力例：
 
 ```json
-{"op":"UPDATE","route_type":"type1","seid":1,"route_key":"1:11","far_id":11,"network_instance":"n9-nw","ue_ip":"172.16.0.1","endpoint":"20.0.90.11","teid":1,"qfi":5,"rd":"65000:1","nexthop":"192.168.1.1"}
+{"op":"UPDATE","route_type":"type1","seid":1,"route_key":"1:11","far_id":11,"network_instance":"n9-nw","ue_ip":"172.16.0.1","endpoint":"20.0.90.11","teid":1,"qfi":5,"rd":"65000:1","rt":["65000:100"],"nexthop":"192.168.1.1"}
 ```
 
 #### ライブキャプチャ + GoBGP 送信

@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+	"encoding/hex"
 	"encoding/json"
 	"os"
 	"path/filepath"
@@ -50,6 +51,7 @@ func TestParseAddr_HostPort(t *testing.T) {
 // TestDryRunOutput_Type1_Minimal verifies type1 dry-run output contains only
 // fields required to build a GoBGP Type1 route.
 func TestDryRunOutput_Type1_Minimal(t *testing.T) {
+	src := "2001:db8::1"
 	rib := &ir.BGPRIBInfo{
 		RouteKey:        "1:11",
 		FARID:           11,
@@ -60,7 +62,9 @@ func TestDryRunOutput_Type1_Minimal(t *testing.T) {
 		TEID:            100,
 		QFI:             9,
 		RD:              "65000:1",
+		RT:              []string{"65000:100"},
 		NexthopAddress:  "192.168.1.1",
+		SourceAddress:   &src,
 	}
 	out := buildDryRunOutput("UPDATE", "type1", rib)
 	data, err := json.Marshal(out)
@@ -84,29 +88,36 @@ func TestDryRunOutput_Type1_Minimal(t *testing.T) {
 		"qfi":              float64(9),
 		"rd":               "65000:1",
 		"nexthop":          "192.168.1.1",
+		"source_address":   "2001:db8::1",
 	}
 	for k, want := range checks {
 		if got := m[k]; got != want {
 			t.Errorf("field %q: got %v, want %v", k, got, want)
 		}
 	}
-	if _, ok := m["rt"]; ok {
-		t.Error("type1 output should not include rt")
+	rt, ok := m["rt"].([]interface{})
+	if !ok || len(rt) != 1 || rt[0] != "65000:100" {
+		t.Fatalf("type1 output rt mismatch: %#v", m["rt"])
 	}
 }
 
 // TestDryRunOutput_Type2_Minimal verifies type2 dry-run output contains only
 // fields required to build a GoBGP Type2 route.
 func TestDryRunOutput_Type2_Minimal(t *testing.T) {
+	epLen := 64
+	mup := &ir.MUPExtendedCommunity{SegmentIdentifier: [6]byte{0x00, 0x01, 0x00, 0x00, 0x00, 0x02}}
 	rib := &ir.BGPRIBInfo{
-		RouteKey:        "2:12",
-		FARID:           12,
-		SEID:            2,
-		NetworkInstance: "n3-nw",
-		EndpointAddress: "20.0.0.1",
-		TEID:            200,
-		RD:              "65000:2",
-		NexthopAddress:  "192.168.1.2",
+		RouteKey:              "2:12",
+		FARID:                 12,
+		SEID:                  2,
+		NetworkInstance:       "n3-nw",
+		EndpointAddress:       "20.0.0.1",
+		TEID:                  200,
+		RD:                    "65000:2",
+		RT:                    []string{"65000:200"},
+		NexthopAddress:        "192.168.1.2",
+		EndpointAddressLength: &epLen,
+		MUPExtendedCommunity:  mup,
 	}
 	out := buildDryRunOutput("ADD", "type2", rib)
 	data, err := json.Marshal(out)
@@ -128,6 +139,7 @@ func TestDryRunOutput_Type2_Minimal(t *testing.T) {
 		"teid":             float64(200),
 		"rd":               "65000:2",
 		"nexthop":          "192.168.1.2",
+		"endpoint_address_length": float64(64),
 	}
 	for k, want := range checks {
 		if got := m[k]; got != want {
@@ -139,6 +151,14 @@ func TestDryRunOutput_Type2_Minimal(t *testing.T) {
 	}
 	if _, ok := m["qfi"]; ok {
 		t.Error("type2 output should not include qfi")
+	}
+	rt, ok := m["rt"].([]interface{})
+	if !ok || len(rt) != 1 || rt[0] != "65000:200" {
+		t.Fatalf("type2 output rt mismatch: %#v", m["rt"])
+	}
+	mupOut, ok := m["mup_extended_community"].(map[string]interface{})
+	if !ok || mupOut["segment_identifier"] != "000100000002" {
+		t.Fatalf("type2 output MUP ext community mismatch: %#v", m["mup_extended_community"])
 	}
 }
 
@@ -273,11 +293,27 @@ func TestDryRunFromPCAP(t *testing.T) {
 
 	// Build static-context derived sets.
 	rdSet := map[string]struct{}{}
+	rtSet := map[string]struct{}{}
 	nexthopSet := map[string]struct{}{}
+	sourceAddrSet := map[string]struct{}{}
+	epLenSet := map[float64]struct{}{}
+	segIDSet := map[string]struct{}{}
 	for _, ni := range []string{"n3-nw", "n9-nw", "internet"} {
 		if ctx, err := sctx.GetContext(ni); err == nil {
 			rdSet[ctx.RD] = struct{}{}
+			for _, rt := range ctx.RT {
+				rtSet[rt] = struct{}{}
+			}
 			nexthopSet[ctx.NexthopAddress] = struct{}{}
+			if ctx.SourceAddress != nil && *ctx.SourceAddress != "" {
+				sourceAddrSet[*ctx.SourceAddress] = struct{}{}
+			}
+			if ctx.EndpointAddressLength != nil {
+				epLenSet[float64(*ctx.EndpointAddressLength)] = struct{}{}
+			}
+			if ctx.MUPExtendedCommunity != nil {
+				segIDSet[hex.EncodeToString(ctx.MUPExtendedCommunity.SegmentIdentifier[:])] = struct{}{}
+			}
 		}
 	}
 
@@ -295,6 +331,7 @@ func TestDryRunFromPCAP(t *testing.T) {
 		requireKey(t, out, "far_id")
 		requireKey(t, out, "network_instance")
 		requireKey(t, out, "rd")
+		requireKey(t, out, "rt")
 		requireKey(t, out, "nexthop")
 		requireKey(t, out, "endpoint")
 		requireKey(t, out, "teid")
@@ -309,6 +346,23 @@ func TestDryRunFromPCAP(t *testing.T) {
 			if _, ok := nexthopSet[nh]; !ok {
 				t.Fatalf("nexthop %q not in static_context set", nh)
 			}
+		}
+		switch rtv := out["rt"].(type) {
+		case []interface{}:
+			for _, v := range rtv {
+				s, _ := v.(string)
+				if _, ok := rtSet[s]; !ok {
+					t.Fatalf("rt %q not in static_context set", s)
+				}
+			}
+		case []string:
+			for _, s := range rtv {
+				if _, ok := rtSet[s]; !ok {
+					t.Fatalf("rt %q not in static_context set", s)
+				}
+			}
+		default:
+			t.Fatalf("rt has invalid type: %T", out["rt"])
 		}
 		if ep, ok := out["endpoint"].(string); ok {
 			if _, ok := endpoints[ep]; !ok {
@@ -327,7 +381,8 @@ func TestDryRunFromPCAP(t *testing.T) {
 			allowed := map[string]struct{}{
 				"op": {}, "route_type": {}, "seid": {}, "route_key": {}, "far_id": {},
 				"network_instance": {}, "ue_ip": {}, "ue_prefix": {},
-				"endpoint": {}, "teid": {}, "qfi": {}, "rd": {}, "nexthop": {},
+				"endpoint": {}, "teid": {}, "qfi": {}, "rd": {}, "rt": {}, "nexthop": {},
+				"source_address": {},
 			}
 			for k := range out {
 				if _, ok := allowed[k]; !ok {
@@ -344,10 +399,16 @@ func TestDryRunFromPCAP(t *testing.T) {
 					t.Fatalf("qfi %v not in pcap-derived set", qfi)
 				}
 			}
+			if sa, ok := out["source_address"].(string); ok {
+				if _, ok := sourceAddrSet[sa]; !ok {
+					t.Fatalf("source_address %q not in static_context set", sa)
+				}
+			}
 		case "type2":
 			allowed := map[string]struct{}{
 				"op": {}, "route_type": {}, "seid": {}, "route_key": {}, "far_id": {},
-				"network_instance": {}, "endpoint": {}, "teid": {}, "rd": {}, "nexthop": {},
+				"network_instance": {}, "endpoint": {}, "teid": {}, "rd": {}, "rt": {}, "nexthop": {},
+				"endpoint_address_length": {}, "mup_extended_community": {},
 			}
 			for k := range out {
 				if _, ok := allowed[k]; !ok {
@@ -359,6 +420,21 @@ func TestDryRunFromPCAP(t *testing.T) {
 			}
 			if _, ok := out["qfi"]; ok {
 				t.Fatalf("type2 should not include qfi")
+			}
+			requireKey(t, out, "endpoint_address_length")
+			requireKey(t, out, "mup_extended_community")
+			if l, ok := out["endpoint_address_length"].(float64); ok {
+				if _, ok := epLenSet[l]; !ok {
+					t.Fatalf("endpoint_address_length %v not in static_context set", l)
+				}
+			}
+			if mext, ok := out["mup_extended_community"].(map[string]interface{}); ok {
+				seg, _ := mext["segment_identifier"].(string)
+				if _, ok := segIDSet[seg]; !ok {
+					t.Fatalf("segment_identifier %q not in static_context set", seg)
+				}
+			} else {
+				t.Fatalf("mup_extended_community has invalid type: %T", out["mup_extended_community"])
 			}
 		}
 	}

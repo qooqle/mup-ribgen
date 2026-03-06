@@ -16,6 +16,7 @@ package main
 
 import (
 	"context"
+	"encoding/hex"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -240,12 +241,21 @@ func buildDryRunOutput(op, routeType string, rib *ir.BGPRIBInfo) map[string]inte
 		"far_id":           rib.FARID,
 		"network_instance": rib.NetworkInstance,
 		"rd":               rib.RD,
+		"rt":               rib.RT,
 		"nexthop":          rib.NexthopAddress,
 	}
 	switch routeType {
 	case "type2":
 		out["endpoint"] = rib.EndpointAddress
 		out["teid"] = rib.TEID
+		if rib.EndpointAddressLength != nil {
+			out["endpoint_address_length"] = *rib.EndpointAddressLength
+		}
+		if rib.MUPExtendedCommunity != nil {
+			out["mup_extended_community"] = map[string]interface{}{
+				"segment_identifier": hex.EncodeToString(rib.MUPExtendedCommunity.SegmentIdentifier[:]),
+			}
+		}
 	default: // type1
 		if rib.UEPrefix != "" {
 			out["ue_prefix"] = rib.UEPrefix
@@ -255,6 +265,9 @@ func buildDryRunOutput(op, routeType string, rib *ir.BGPRIBInfo) map[string]inte
 		out["endpoint"] = rib.EndpointAddress
 		out["teid"] = rib.TEID
 		out["qfi"] = rib.QFI
+		if rib.SourceAddress != nil && *rib.SourceAddress != "" {
+			out["source_address"] = *rib.SourceAddress
+		}
 	}
 	return out
 }
