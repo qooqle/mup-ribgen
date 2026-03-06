@@ -274,7 +274,7 @@ func TestDryRunFromPCAP(t *testing.T) {
 	// Build static-context derived sets.
 	rdSet := map[string]struct{}{}
 	nexthopSet := map[string]struct{}{}
-	for _, ni := range []string{"n9-nw", "internet"} {
+	for _, ni := range []string{"n3-nw", "n9-nw", "internet"} {
 		if ctx, err := sctx.GetContext(ni); err == nil {
 			rdSet[ctx.RD] = struct{}{}
 			nexthopSet[ctx.NexthopAddress] = struct{}{}
