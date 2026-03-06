@@ -143,7 +143,7 @@ mup-ribgen \
 出力例：
 
 ```json
-{"op":"UPDATE","route_type":"type1","seid":1,"ue_ip":"172.16.0.1","endpoint":"20.0.90.11","teid":1,"rd":"65000:1","rt":["65000:100"],"nexthop":"192.168.1.1","network_instance":"n9-nw"}
+{"op":"UPDATE","route_type":"type1","seid":1,"route_key":"1:11","far_id":11,"network_instance":"n9-nw","ue_ip":"172.16.0.1","endpoint":"20.0.90.11","teid":1,"qfi":5,"rd":"65000:1","nexthop":"192.168.1.1"}
 ```
 
 #### ライブキャプチャ + GoBGP 送信

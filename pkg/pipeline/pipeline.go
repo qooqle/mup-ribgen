@@ -59,22 +59,43 @@ func ConnectMode1ToIR(ctx context.Context, ctrl *mode1.Controller, irMgr *ir.Man
 // Runs asynchronously; stops when irMgr.Events() is drained (no more events).
 func ConnectIRToBGP(ctx context.Context, irMgr *ir.Manager, sender BGPSender, routeType string) {
 	go func() {
+		types := normalizeRouteTypes(routeType)
 		for ev := range irMgr.Events() {
 			if ev.Info == nil && ev.Type != ir.BGPEventDelete {
 				continue
 			}
 			switch ev.Type {
 			case ir.BGPEventCreate:
-				sendBGP(ctx, sender, routeType, "add", ev.Info)
+				for _, rt := range types {
+					logBGPEvent("add", rt, ev)
+					sendBGP(ctx, sender, rt, "add", ev.Info)
+				}
 			case ir.BGPEventUpdate:
-				sendBGP(ctx, sender, routeType, "update", ev.Info)
+				for _, rt := range types {
+					logBGPEvent("update", rt, ev)
+					sendBGP(ctx, sender, rt, "update", ev.Info)
+				}
 			case ir.BGPEventDelete:
 				if ev.Info != nil {
-					sendBGP(ctx, sender, routeType, "delete", ev.Info)
+					for _, rt := range types {
+						logBGPEvent("delete", rt, ev)
+						sendBGP(ctx, sender, rt, "delete", ev.Info)
+					}
 				}
 			}
 		}
 	}()
+}
+
+func normalizeRouteTypes(routeType string) []string {
+	switch routeType {
+	case "both":
+		return []string{"type1", "type2"}
+	case "type2":
+		return []string{"type2"}
+	default:
+		return []string{"type1"}
+	}
 }
 
 // sendBGP dispatches a BGP operation to the appropriate route type handler.
@@ -102,6 +123,23 @@ func sendBGP(ctx context.Context, sender BGPSender, routeType, op string, rib *i
 	}
 	if err != nil {
 		slog.Warn("pipeline: BGP send failed",
-			"op", op, "route_type", routeType, "seid", rib.SEID, "err", err)
+			"op", op, "route_type", routeType, "route_key", rib.RouteKey, "seid", rib.SEID, "err", err)
 	}
+}
+
+func logBGPEvent(op, routeType string, ev *ir.BGPEvent) {
+	if ev == nil || ev.Info == nil {
+		return
+	}
+	slog.Info("pipeline: BGP event",
+		"op", op,
+		"route_type", routeType,
+		"route_key", ev.RouteKey,
+		"seid", ev.SEID,
+		"far_id", ev.Info.FARID,
+		"network_instance", ev.Info.NetworkInstance,
+		"endpoint", ev.Info.EndpointAddress,
+		"teid", ev.Info.TEID,
+		"qfi", ev.Info.QFI,
+	)
 }
