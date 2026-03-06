@@ -115,7 +115,12 @@ func TestProperty21_IRManagerUpdateSessionInfo(t *testing.T) {
 			m := ir.NewManager(fixedSctx(), 32)
 
 			// Create initial entry
-			info1 := &ir.SessionInformation{SEID: seid, TEID: teid1, NetworkInstance: "test-nw"}
+				info1 := &ir.SessionInformation{
+					SEID:            seid,
+					TEID:            teid1,
+					EndpointAddress: "198.51.100.1",
+					NetworkInstance: "test-nw",
+				}
 			if err := m.HandleCreate(info1); err != nil {
 				return false
 			}
@@ -123,7 +128,12 @@ func TestProperty21_IRManagerUpdateSessionInfo(t *testing.T) {
 			<-m.Events()
 
 			// Update
-			info2 := &ir.SessionInformation{SEID: seid, TEID: teid2, NetworkInstance: "test-nw"}
+				info2 := &ir.SessionInformation{
+					SEID:            seid,
+					TEID:            teid2,
+					EndpointAddress: "198.51.100.1",
+					NetworkInstance: "test-nw",
+				}
 			if err := m.HandleUpdate(info2); err != nil {
 				return false
 			}
