@@ -4,6 +4,7 @@
 package dialect
 
 import (
+	"sort"
 	"time"
 
 	"github.com/qooqle/mup-ribgen/pkg/dslruntime"
@@ -193,60 +194,104 @@ func (t *KeysightN9Transformer) ModificationToState(req *pfcp.PFCPModificationRe
 //	TEID:            Forwarding FAR → forwarding_parameters.outer_header_creation.teid
 //	QFI:             first QER's qfi_value (stored in FAR.Fields["qfi_value"] by QER merge)
 func (t *KeysightN9Transformer) StateToSessionInfo(state *pfcp.PFCPSessionState) (*ir.SessionInformation, error) {
-	info := &ir.SessionInformation{
+	infos, err := t.StateToSessionInfos(state)
+	if err != nil {
+		return nil, err
+	}
+	if len(infos) == 0 {
+		return &ir.SessionInformation{
+			SEID:   state.SEID,
+			Source: ir.Mode1PFCP,
+		}, nil
+	}
+	return infos[0], nil
+}
+
+// StateToSessionInfos converts state to one SessionInformation per forwarding FAR.
+// Output order is deterministic (ascending FAR ID).
+func (t *KeysightN9Transformer) StateToSessionInfos(state *pfcp.PFCPSessionState) ([]*ir.SessionInformation, error) {
+	base := &ir.SessionInformation{
 		SEID:   state.SEID,
 		Source: ir.Mode1PFCP,
 	}
 
-	// Extract UE IP from DL PDR (source_interface = Core = 1)
+	var ueIP, ueNI string
 	for _, pdr := range state.PDRs {
 		pdi, _ := pdr.Fields["pdi"].(map[string]interface{})
-		if pdi == nil {
+		if pdi == nil || rtn9.CoerceUint8(pdi["source_interface"]) != 1 {
 			continue
 		}
-		if rtn9.CoerceUint8(pdi["source_interface"]) != 1 {
-			continue // skip UL PDRs (Access = 0)
-		}
-		if ueIP, _ := pdi["ue_ip_address"].(map[string]interface{}); ueIP != nil {
-			if ipv4 := rtn9.CoerceString(ueIP["ipv4"]); ipv4 != "" {
-				info.UEIPAddress = ipv4
+		if ueIPMap, _ := pdi["ue_ip_address"].(map[string]interface{}); ueIPMap != nil {
+			if ipv4 := rtn9.CoerceString(ueIPMap["ipv4"]); ipv4 != "" {
+				ueIP = ipv4
 			}
 		}
 		if ni := rtn9.CoerceString(pdi["network_instance"]); ni != "" {
-			info.NetworkInstance = ni
+			ueNI = ni
 		}
 		break
 	}
+	base.UEIPAddress = ueIP
+	base.NetworkInstance = ueNI
 
-	// Extract N9 endpoint and TEID from the forwarding FAR.
-	// FORW = bit 2 of Octet 5 (high byte) → 0x0200 in big-endian uint16
-	// (3GPP TS 29.244 §8.2.26 Table 8.2.26-1).
-	for _, far := range state.FARs {
-		applyAction := rtn9.CoerceUint16(far.Fields["apply_action"])
-		if applyAction&0x0200 == 0 {
-			continue // not a forwarding FAR
-		}
-		fwdParams, _ := far.Fields["forwarding_parameters"].(map[string]interface{})
-		if fwdParams == nil {
+	farIDs := make([]uint32, 0, len(state.FARs))
+	for farID, far := range state.FARs {
+		if far == nil {
 			continue
 		}
-		if ohc, _ := fwdParams["outer_header_creation"].(map[string]interface{}); ohc != nil {
-			info.TEID = rtn9.CoerceUint32(ohc["teid"])
-			info.EndpointAddress = rtn9.CoerceString(ohc["ipv4"])
+		applyAction := rtn9.CoerceUint16(far.Fields["apply_action"])
+		if applyAction&0x0200 == 0 {
+			continue
 		}
-		if ni := rtn9.CoerceString(fwdParams["network_instance"]); ni != "" {
-			info.NetworkInstance = ni
-		}
-		break
+		farIDs = append(farIDs, farID)
 	}
+	sort.Slice(farIDs, func(i, j int) bool { return farIDs[i] < farIDs[j] })
 
-	// Extract QFI from the first QER entry
+	infos := make([]*ir.SessionInformation, 0, len(farIDs))
+	for _, farID := range farIDs {
+		far := state.FARs[farID]
+		if far == nil {
+			continue
+		}
+		info := *base
+		fwdParams, _ := far.Fields["forwarding_parameters"].(map[string]interface{})
+		if fwdParams != nil {
+			if ohc, _ := fwdParams["outer_header_creation"].(map[string]interface{}); ohc != nil {
+				info.TEID = rtn9.CoerceUint32(ohc["teid"])
+				info.EndpointAddress = rtn9.CoerceString(ohc["ipv4"])
+			}
+			if ni := rtn9.CoerceString(fwdParams["network_instance"]); ni != "" {
+				info.NetworkInstance = ni
+			}
+		}
+		info.QFI = qfiForFAR(state, farID)
+		infos = append(infos, &info)
+	}
+	return infos, nil
+}
+
+func qfiForFAR(state *pfcp.PFCPSessionState, farID uint32) uint8 {
+	for _, pdr := range state.PDRs {
+		if pdr == nil || rtn9.CoerceUint32(pdr.Fields["far_id"]) != farID {
+			continue
+		}
+		qerID := rtn9.CoerceUint32(pdr.Fields["qer_id"])
+		if qerID == 0 {
+			continue
+		}
+		if qer := state.QERs[qerID]; qer != nil {
+			if qfi := rtn9.CoerceUint8(qer.Fields["qfi_value"]); qfi != 0 {
+				return qfi
+			}
+		}
+	}
 	for _, qer := range state.QERs {
-		info.QFI = rtn9.CoerceUint8(qer.Fields["qfi_value"])
-		if info.QFI != 0 {
-			break
+		if qer == nil {
+			continue
+		}
+		if qfi := rtn9.CoerceUint8(qer.Fields["qfi_value"]); qfi != 0 {
+			return qfi
 		}
 	}
-
-	return info, nil
+	return 0
 }
