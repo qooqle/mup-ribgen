@@ -8,7 +8,7 @@
 - 基盤: IR Manager、Static Context Manager、ログ、設定
 - DSL: Parser、Compiler、Linter、Pretty Printer、Test Harness（3レベル）
 - Mode-1: PFCP Sniffer、Dialect Transformer（DSLコンパイル済み）、PFCP Session State Manager
-- Mode-2: SMF Integration Plugin（free5GC、Open5GS、OAI用）
+- Mode-2: SMF Integration Plugin（free5GC用、gRPC push方式）
 - GoBGP統合: gRPCクライアント、Type 1/2ルート生成
 - テスト: プロパティベーステスト + 単体テストによる28個の正確性プロパティ
 
@@ -274,51 +274,38 @@
 - [x] 6. チェックポイント - Mode 1が完全に機能することを確認
   - 全てのテストが合格することを確認し、疑問があればユーザーに質問する
 
-- [ ] 7. フェーズ5: Mode 2実装（第9-10週）
-  - [ ] 7.1 Session Information受信APIの実装
-    - Session Information受信用のgRPCサービスを実装
-    - Session Information受信用のHTTP REST APIを実装
-    - 非同期リクエスト処理をサポート
+- [x] 7. フェーズ5: Mode 2実装（第9-10週）
+  - [x] 7.1 Session Information受信APIの実装
+    - gRPC サービス（JSON codec）を実装（pkg/mode2/）
+    - 非同期受信、GracefulStop対応
     - _要件: 3.6_
-  
-  - [ ] 7.2 Mode 2セッションハンドリングのプロパティテストを作成
-    - **Property 6: Mode2 Session Information受信の処理**
+
+  - [x] 7.2 Mode 2セッションハンドリングのプロパティテストを作成
+    - **Property 6: Mode2 Session Information受信の処理**（pkg/mode2/receiver_test.go）
     - **検証: 要件 3.1, 3.3**
     - **Property 7: Mode2 Session Information更新の処理**
     - **検証: 要件 3.4**
     - **Property 8: Mode2 Session Information削除の処理**
     - **検証: 要件 3.5**
-  
-  - [ ] 7.3 free5GC SMF Integration Pluginの実装
-    - free5GC SMF用のGoプラグインを作成
+
+  - [x] 7.3 free5GC SMF Integration Pluginの実装
+    - free5GC SMF用のGoプラグインを作成（plugins/free5gc/）
     - セッション確立/更新/削除イベントにフック
     - free5GCセッションデータからSession Informationを抽出
     - gRPC経由でMUP ControllerにSession Informationを送信
     - _要件: 3.2, 3.3, 3.4, 3.5, 3.7_
-  
-  - [ ] 7.4 free5GCプラグインの単体テストを作成
-    - セッションイベントフックをテスト
-    - Session Information抽出をテスト
-    - MUP ControllerとのgRPC通信をテスト
-  
-  - [ ] 7.5 Open5GS SMF Integration Pluginの実装
-    - Open5GS SMF用のCプラグインを作成
-    - セッション確立/更新/削除イベントにフック
-    - Open5GSセッションデータからSession Informationを抽出
-    - HTTP API経由でMUP ControllerにSession Informationを送信
-    - _要件: 3.2, 3.3, 3.4, 3.5, 3.7_
-  
-  - [ ] 7.6 Open5GSプラグインの単体テストを作成
-    - セッションイベントフックをテスト
-    - Session Information抽出をテスト
-    - MUP ControllerとのHTTP API通信をテスト
-  
-  - [ ] 7.7 Mode 2受信機とIR Managerの統合
-    - Session Information Receiver → IR Managerを接続
-    - 受信したSession InformationをIR Managerに渡す
+
+  - [x] 7.4 free5GCプラグインのテスト（統合テスト兼用）
+    - gRPC エンドツーエンド統合テスト（pkg/mode2/integration_test.go）
+
+  - [x] 7.5 Mode 2受信機とIR Managerの統合
+    - Receiver.ReportSession が IRHandler.HandleCreate/Update/Delete に直接接続
+
+  - [x] 7.6 Mode 2エンドツーエンドフローの統合テストを作成
+    - gRPC Client → Receiver → mockIRHandler の完全パス（pkg/mode2/integration_test.go）
     - _要件: 3.1, 3.3, 3.4, 3.5_
   
-  - [ ] 7.8 Mode 2エンドツーエンドフローの統合テストを作成
+  - [ ] 7.6 Mode 2エンドツーエンドフローの統合テストを作成
     - プラグイン → Session Information → BGP RIB Info → GoBGPルートをテスト
     - モックSMF実装でテスト
 

@@ -90,13 +90,21 @@ func (m *Manager) HandleUpdate(info *SessionInformation) error {
 	}
 	if hasExisting {
 		rib.CreatedAt = existing.CreatedAt
+		m.mu.Lock()
+		m.ribs[info.SEID] = rib
+		m.mu.Unlock()
+
+		m.emit(&BGPEvent{Type: BGPEventUpdate, Info: rib, SEID: info.SEID})
+		return nil
 	}
 
+	// If we receive a Modification before a usable Establishment (e.g. missing NetworkInstance),
+	// treat this as a create to avoid dropping the first usable RIB entry.
 	m.mu.Lock()
 	m.ribs[info.SEID] = rib
 	m.mu.Unlock()
 
-	m.emit(&BGPEvent{Type: BGPEventUpdate, Info: rib, SEID: info.SEID})
+	m.emit(&BGPEvent{Type: BGPEventCreate, Info: rib, SEID: info.SEID})
 	return nil
 }
 

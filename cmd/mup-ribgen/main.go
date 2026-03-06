@@ -17,6 +17,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"encoding/hex"
 	"flag"
 	"fmt"
 	"log/slog"
@@ -237,6 +238,10 @@ type routeOutput struct {
 	RT        []string `json:"rt"`
 	Nexthop   string   `json:"nexthop"`
 	Network   string   `json:"network_instance"`
+	Source    *string  `json:"source_address,omitempty"`
+
+	EndpointAddressLength *int                      `json:"endpoint_address_length,omitempty"`
+	MUPExtendedCommunity  *mupExtendedCommunityJSON `json:"mup_extended_community,omitempty"`
 }
 
 func (d *dryRunSender) print(op, routeType string, rib *ir.BGPRIBInfo) error {
@@ -253,10 +258,22 @@ func (d *dryRunSender) print(op, routeType string, rib *ir.BGPRIBInfo) error {
 		RT:        rib.RT,
 		Nexthop:   rib.NexthopAddress,
 		Network:   rib.NetworkInstance,
+		Source:    rib.SourceAddress,
+
+		EndpointAddressLength: rib.EndpointAddressLength,
+	}
+	if rib.MUPExtendedCommunity != nil {
+		out.MUPExtendedCommunity = &mupExtendedCommunityJSON{
+			SegmentIdentifier: hex.EncodeToString(rib.MUPExtendedCommunity.SegmentIdentifier[:]),
+		}
 	}
 	b, _ := json.Marshal(out)
 	fmt.Println(string(b))
 	return nil
+}
+
+type mupExtendedCommunityJSON struct {
+	SegmentIdentifier string `json:"segment_identifier"`
 }
 
 // --- helpers -----------------------------------------------------------------

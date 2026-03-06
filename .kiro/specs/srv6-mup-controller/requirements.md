@@ -79,19 +79,19 @@
 8. THE PFCP_Session_State_Manager SHALL Modificationメッセージの差分情報を既存ステートにマージする
 9. WHEN EstablishmentなしでModificationを受信した場合、THE MUP_Controller SHALL エラーログを出力して処理をスキップする
 
-### 要件3: Mode_2による既存SMF実装とのインテグレーション
+### 要件3: Mode_2によるfree5GC SMFとのインテグレーション
 
-**ユーザーストーリー:** ネットワークアーキテクトとして、既存のSMF実装（free5GC、Open5GS等）からセッション情報を取得したい。これにより、成熟したSMF実装を活用しながらMUP機能を追加できる。
+**ユーザーストーリー:** ネットワークアーキテクトとして、free5GC SMF からgRPC経由でセッション情報を取得したい。これにより、成熟したSMF実装を活用しながらMUP機能を追加できる。
 
 #### 受入基準
 
-1. WHERE Mode_2が有効化されている場合、THE MUP_Controller SHALL 既存SMF実装からSession_Informationを受信する
-2. THE MUP_Controller SHALL 既存SMF実装に統合可能なSession_Information出力プラグインを提供する
+1. WHERE Mode_2が有効化されている場合、THE MUP_Controller SHALL free5GC SMFからSession_Informationを受信する
+2. THE MUP_Controller SHALL free5GC SMFに統合可能なSession_Information出力プラグインを提供する
 3. THE プラグイン SHALL セッション確立時にSession_Informationを抽出してMUP_Controllerに送信する
 4. THE プラグイン SHALL セッション更新時にSession_Informationを抽出してMUP_Controllerに送信する
 5. THE プラグイン SHALL セッション削除時にSession_Informationを抽出してMUP_Controllerに送信する
-6. THE MUP_Controller SHALL プラグインからのSession_Information受信にgRPCまたはHTTP APIを使用する
-7. THE プラグイン SHALL free5GC、Open5GS、OAI等の主要なオープンソースSMF実装に対応する
+6. THE MUP_Controller SHALL プラグインからのSession_Information受信にgRPC pushを使用する
+7. THE プラグイン SHALL free5GC SMFのセッションコンテキスト更新をフックして動作し、制御プロトコル（Nsmf REST / GTPv2）を意識しない
 
 ### 要件4: Session Information（IR）によるデータモデル統一
 
@@ -290,6 +290,6 @@
 1. ISD（Interworking Segment Discovery）機能は本プロジェクトのスコープ外
 2. DSD（Direct Segment Discovery）機能は本プロジェクトのスコープ外
 3. SMF機能の実装は本プロジェクトのスコープ外（既存SMF実装を活用する）
-4. Mode_2では既存SMF実装（free5GC、Open5GS、OAI等）とのインテグレーションが必要
+4. Mode_2ではfree5GC SMFとのgRPCインテグレーションが必要。4G/5G制御プロトコル（Nsmf REST / GTPv2）の差異はfree5GC SMF内部で吸収する
 5. 初期バージョンはスタンドアロンバイナリとして提供し、コンテナ化は将来対応
 6. セッション状態の永続化は将来実装（初期バージョンはインメモリのみ）

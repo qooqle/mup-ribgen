@@ -35,6 +35,18 @@
 - **メインバイナリ** (`cmd/mup-ribgen`): `--pcap`/`--interface` + `--dry-run` + `--config` サポート
 - `--config` フラグで JSON 設定ファイルからモード選択・方言・GoBGP アドレスを読み込み
 
+#### フェーズ5: Mode 2実装
+- **Mode 2 gRPC Receiver** (`pkg/mode2`): free5GC SMF プラグインからのセッションイベント受信
+  - JSON codec over gRPC（protoc 不要、JSON over `application/grpc+json`）
+  - `ListenAndServe` でサーバ起動、context キャンセルで GracefulStop
+  - `Receiver.ReportSession` が IRHandler（ir.Manager）に直接接続
+- **Mode 2 gRPC Client** (`pkg/mode2`): テスト・プラグイン共用クライアント
+- **free5GC SMF Integration Plugin** (`plugins/free5gc`): free5GC SMF 向けフックライブラリ
+  - `MUPClient.OnSessionEstablished/Modified/Deleted` — セッション確立/更新/削除フック
+  - 4G（GTPv2 S5-C）/ 5G（Nsmf REST）の制御プロトコル差異は free5GC 内部で吸収
+- **Property 6-8**: Mode 2 セッション受信/更新/削除テスト（各 100 イテレーション）
+- **gRPC 統合テスト**: Client → Receiver → mockIRHandler の完全パス検証
+
 #### フェーズ6: 包括的テストとドキュメント
 - **Property 1**: モード選択テスト (req 1.1, 1.4, 1.5)
 - **Property 27**: CLI 引数テスト (req 11.2)
@@ -58,7 +70,10 @@
 | Property 3 | PFCP Session Establishment | 2.3 | ✅ |
 | Property 4 | PFCP Session Modification | 2.4, 2.8, 2.9 | ✅ |
 | Property 5 | PFCP Session Deletion | 2.5 | ✅ |
-| Property 6-9 | Mode 2 関連 | 3.x | ⏭️ スキップ（Mode 2 未実装） |
+| Property 6 | Mode2 Session Information受信 | 3.1, 3.3 | ✅ |
+| Property 7 | Mode2 Session Information更新 | 3.4 | ✅ |
+| Property 8 | Mode2 Session Information削除 | 3.5 | ✅ |
+| Property 9 | Mode2 Session Passthrough | 2.6 | ⏭️ スキップ（Mode 1 専用 req） |
 | Property 10 | Session Information データ完全性 | 4.2-4.5 | ✅ |
 | Property 11 | DSL コンパイル | 5.3, 5.4, 5.5 | ✅ |
 | Property 12 | DSL パース | 6.1 | ✅ |
@@ -80,13 +95,13 @@
 
 ### 既知の制限事項
 
-- **Mode 2 未実装**: free5GC/Open5GS SMF プラグインはフェーズ5としてスキップ
+- **free5GC 実環境テスト**: free5GC ローカル環境での動作確認は別途必要
 - **libpcap 依存**: ライブキャプチャには libpcap が必要（PCAP リプレイは不要）
 - **単一方言**: 現在 Keysight N9 方言のみ実装済み（他方言は DSL で追加可能）
 
 ### 将来の作業項目
 
-- Mode 2 実装（free5GC / Open5GS / OAI SMF プラグイン）
+- free5GC 実環境での動作確認（smf/context フック統合）
 - 追加 PFCP 方言サポート
 - Kubernetes/コンテナデプロイメント対応
 - メトリクス出力（Prometheus）

@@ -5,7 +5,7 @@ SRv6 MUP Controller — モバイルネットワークのセッション情報�
 ## 概要
 
 - **Mode 1 (Passive)**: SMF-UPF 間の PFCP トラフィックをパッシブスニッフィング
-- **Mode 2 (Active)**: 既存 SMF 実装（free5GC, Open5GS 等）からプラグイン経由でセッション情報を受信（将来実装予定）
+- **Mode 2 (Active)**: free5GC SMF からgRPCプラグイン経由でセッション情報を受信（フェーズ5実装予定）
 - PFCP 方言の差異を DSL で吸収し、GoBGP に MUP SAFI ルートとして配信
 
 ---
@@ -406,7 +406,7 @@ go test ./pkg/testharness/... -dialect vendorx_n9
 
 > **注**: Mode 2 は将来実装予定。現時点では Mode 1 のみ利用可能。
 
-Mode 2 では、既存 SMF 実装からのセッション情報をプラグイン経由で受信します。インターフェースは `pipeline.BGPSender` と同等の設計で、gRPC または HTTP API 経由で Session Information を `ir.Manager` に渡します。
+Mode 2 では、free5GC SMF からのセッション情報を gRPC push 経由で受信します。free5GC SMF 側にクライアントプラグインを統合し、mup-ribgen の gRPC サーバへ Session Information を push します。4G（GTPv2 S5-C）/5G（Nsmf REST）の制御プロトコル差異は free5GC SMF 内部で吸収されます。
 
 ```go
 // Mode 2 プラグインが実装すべきインターフェース（将来）

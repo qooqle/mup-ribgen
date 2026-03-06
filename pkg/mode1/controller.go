@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"strconv"
 
 	"github.com/qooqle/mup-ribgen/pkg/ir"
 	"github.com/qooqle/mup-ribgen/pkg/pfcp"
@@ -133,7 +134,7 @@ func (c *Controller) handlePacket(pkt *pfcp.RawPacket) {
 		cpSEID := msg.SEID
 		if pfcpFields, ok := msg.Fields["pfcp"].(map[string]interface{}); ok {
 			if fSEID, ok := pfcpFields["f_seid"].(map[string]interface{}); ok {
-				if upSEID, ok := fSEID["seid"].(uint64); ok && upSEID != 0 {
+				if upSEID := coerceUint64(fSEID["seid"]); upSEID != 0 {
 					c.sm.RegisterSEIDAlias(upSEID, cpSEID)
 					slog.Debug("mode1: SEID alias registered", "cp_seid", cpSEID, "up_seid", upSEID)
 				}
@@ -148,6 +149,42 @@ func (c *Controller) handlePacket(pkt *pfcp.RawPacket) {
 	default:
 		// heartbeats, association messages, responses – ignored
 	}
+}
+
+func coerceUint64(v interface{}) uint64 {
+	switch t := v.(type) {
+	case uint64:
+		return t
+	case uint32:
+		return uint64(t)
+	case uint16:
+		return uint64(t)
+	case uint8:
+		return uint64(t)
+	case int64:
+		if t < 0 {
+			return 0
+		}
+		return uint64(t)
+	case int:
+		if t < 0 {
+			return 0
+		}
+		return uint64(t)
+	case float64:
+		if t < 0 {
+			return 0
+		}
+		return uint64(t)
+	case string:
+		if t == "" {
+			return 0
+		}
+		if u, err := strconv.ParseUint(t, 0, 64); err == nil {
+			return u
+		}
+	}
+	return 0
 }
 
 // emit sends a SessionEvent on the events channel without blocking.

@@ -34,7 +34,7 @@ SRv6 MUP Controllerは、モバイルネットワークのセッション情報�
 graph TB
     subgraph "External Systems"
         MME[MME/AMF]
-        SMF[Existing SMF<br/>free5GC/Open5GS/OAI]
+        SMF[Existing SMF<br/>free5GC]
         Plugin[SMF Integration Plugin<br/>Session Info Extractor]
         UPF[UPF]
         GoBGP[GoBGP Daemon]
@@ -168,12 +168,12 @@ graph TB
 #### Mode 2（アクティブモード）のデータフロー
 
 **既存SMF実装との連携**:
-1. **SMF処理**: AMF/MME → GTPv2/Nsmf API → 既存SMF実装（free5GC、Open5GS等）→ PFCP → UPF
-2. **プラグイン抽出**: 既存SMF実装 → SMF Integration Plugin → Session Information（Session Informationスキーマに基づいてデータを生成）
+1. **SMF処理**: AMF/MME → GTPv2/Nsmf API → free5GC SMF → PFCP → UPF
+2. **プラグイン抽出**: free5GC SMF → SMF Integration Plugin（gRPC push） → Session Information
 3. **BGP RIB Info生成**: Session Information + Static Context → BGP RIB Info（IR Managerで合成）
 4. **BGP配信**: BGP RIB Info → GoBGP gRPC Client → MUP SAFI RIB
 
-**注**: Mode-2では、既存SMF実装がGTPv2/Nsmf APIの処理、UE IP割り当て、UPF選択、PFCP通信等の全てのSMF機能を担当する。MUP Controllerは、SMF Integration Pluginを通じてSession Informationを受信するのみ。DSLはMode-1専用であり、Mode-2では使用しない。
+**注**: Mode-2では、free5GC SMFがGTPv2/Nsmf APIの処理、UE IP割り当て、UPF選択、PFCP通信等の全てのSMF機能を担当する。4G（GTPv2 S5-C）と5G（Nsmf REST）の制御プロトコルの違いはfree5GC内部で吸収される。MUP Controllerは、SMF Integration Plugin経由でgRPC pushされたSession Informationを受信するのみ。DSLはMode-1専用であり、Mode-2では使用しない。
 
 
 ## Components and Interfaces
@@ -286,20 +286,18 @@ func NewPFCPSessionStateManager(transformer DialectTransformer) PFCPSessionState
 ### Mode 2: SMF Integration Plugin
 
 **責務**:
-- 既存SMF実装（free5GC、Open5GS、OAI等）からSession Informationを抽出
-- Session InformationをMUP ControllerのIR Managerに送信
-- 既存SMF実装の内部処理に影響を与えない
+- free5GC SMFからSession Informationを抽出
+- Session InformationをMUP ControllerのIR Managerに送信（gRPC push）
+- free5GC SMFの内部処理に影響を与えない
 
 **実装方針**:
-- 既存SMF実装のコードベースに統合可能なプラグイン形式
+- free5GC SMFのコードベースに統合するGoプラグイン形式
 - SMFのセッション確立/更新/削除時にフックして情報を抽出
-- gRPCまたはHTTP APIでMUP Controllerに送信
-- 非同期送信（SMFの処理をブロックしない）
+- gRPC pushでMUP Controllerに非同期送信（SMFの処理をブロックしない）
+- 制御プロトコル（Nsmf REST / GTPv2 S5-C）はfree5GC内部で処理済み、プラグインはセッションコンテキストのみを参照
 
 **対応SMF実装**:
-- free5GC: Go言語実装、プラグイン機構を活用
-- Open5GS: C言語実装、イベントフック機構を活用
-- OAI: C++言語実装、カスタムフック追加
+- free5GC: Go言語実装、`smf/context/`のセッションコンテキストフックを活用
 
 **インターフェース**:
 ```go
@@ -2101,14 +2099,12 @@ go tool pprof block.prof
 **タスク**:
 1. Session Information受信APIの実装（gRPC/HTTP）
 2. free5GC用SMF Integration Pluginの実装
-3. Open5GS用SMF Integration Pluginの実装
-4. プラグインとMUP Controllerの統合テスト
-5. Mode 2統合テスト
+3. プラグインとMUP Controllerの統合テスト
+4. Mode 2統合テスト
 
 **成果物**:
-- `pkg/plugin/receiver/`: Session Information受信API
-- `plugins/free5gc/`: free5GC用プラグイン
-- `plugins/open5gs/`: Open5GS用プラグイン
+- `pkg/mode2/`: Session Information受信API（gRPCサーバ）
+- `plugins/free5gc/`: free5GC用gRPCクライアントプラグイン
 - `docs/plugin-integration-guide.md`: プラグイン統合ガイド
 
 ### Phase 6: テストとドキュメント（Week 11-12）
@@ -2164,9 +2160,8 @@ go tool pprof block.prof
    - MUP Extended Communityの詳細フォーマット
 
 3. **Mode 2のSMF機能範囲**
-   - 最小限のSMF機能の具体的な定義
-   - GTPv2とNsmf APIのどちらを優先するか
-   - エラー応答の詳細仕様
+   - free5GC SMFのセッションコンテキストをフックする実装詳細
+   - gRPC push時のエラー応答とリトライ仕様
 
 4. **パフォーマンス要件の妥当性**
    - 10,000セッションは現実的な目標か

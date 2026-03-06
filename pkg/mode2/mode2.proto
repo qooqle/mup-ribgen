@@ -1,0 +1,49 @@
+// mode2.proto – Mode 2 SMF Integration Plugin gRPC service definition.
+// This file documents the protocol. Generated code is written manually in
+// types.go and server.go using a JSON codec to avoid protoc build dependency.
+//
+// To regenerate Go stubs:
+//   protoc --go_out=. --go-grpc_out=. pkg/mode2/mode2.proto
+
+syntax = "proto3";
+
+package mode2;
+
+option go_package = "github.com/qooqle/mup-ribgen/pkg/mode2;mode2";
+
+// EventType indicates whether the session was created, updated, or deleted.
+enum EventType {
+  CREATE = 0;
+  UPDATE = 1;
+  DELETE = 2;
+}
+
+// SessionInfo carries the session data extracted from a free5GC SMF context.
+message SessionInfo {
+  string session_id       = 1;
+  uint64 seid             = 2;
+  string ue_ip_address    = 3;
+  string ue_prefix        = 4;  // CIDR notation
+  uint32 teid             = 5;
+  uint32 qfi              = 6;  // QoS Flow ID (0 for 4G sessions)
+  string endpoint_address = 7;
+  string network_instance = 8;  // DNN / APN
+}
+
+// SessionEvent is sent from the SMF plugin to mup-ribgen.
+message SessionEvent {
+  EventType type    = 1;
+  SessionInfo session = 2;
+}
+
+// EventResponse is the reply from mup-ribgen.
+message EventResponse {
+  bool   accepted      = 1;
+  string error_message = 2;
+}
+
+// SMFPluginService is implemented by mup-ribgen (server) and called by the
+// free5GC SMF integration plugin (client).
+service SMFPluginService {
+  rpc ReportSession(SessionEvent) returns (EventResponse);
+}
