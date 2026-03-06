@@ -78,6 +78,8 @@
 7. THE PFCP_Session_State_Manager SHALL セッションのライフサイクル（Establishment → Modification → Deletion）を管理する
 8. THE PFCP_Session_State_Manager SHALL Modificationメッセージの差分情報を既存ステートにマージする
 9. WHEN EstablishmentなしでModificationを受信した場合、THE MUP_Controller SHALL エラーログを出力して処理をスキップする
+10. WHEN PFCP Session Establishment Responseを検出した場合、THE MUP_Controller SHALL ヘッダSEID（CP側）とF-SEID（UP側）を対応付け、以後のModification/Deletionを同一セッションとして扱えるようSEIDエイリアスを登録する
+11. THE MUP_Controller SHALL DeletionイベントをIR_Managerに通知する際、SEIDエイリアスに基づく正規化（canonical）SEIDを使用する
 
 ### 要件3: Mode_2によるfree5GC SMFとのインテグレーション
 
@@ -106,6 +108,9 @@
 5. THE Session_Information SHALL エンドポイント情報（EndpointAddress、NetworkInstance）を含む
 6. THE IR_Manager SHALL Session_InformationとStatic_ContextからBGP_RIB_Infoを生成する
 7. THE BGP_RIB_Info SHALL GoBGP MUP_SAFI RIB構成に必要な全ての情報を含む
+8. THE MUP_Controller SHALL 同一SEID内で複数の転送経路（Route Instance）を表現できるIR拡張を提供する
+9. THE Route Instance SHALL route_key（例: canonical_seid + far_id）で一意に識別される
+10. THE IR_Manager SHALL SEID単位ではなくRoute Instance単位でBGP_RIB_Infoを管理できる
 
 ### 要件5: PFCP方言対応のためのDSL（Mode_1専用）
 
@@ -122,6 +127,9 @@
 7. THE DSL SHALL sample/Keysight/配下のPFCPキャプチャデータを参照実装として使用する
 8. THE MUP_Controller SHALL DSL変換ロジックの正確性を自動テストする機能を提供する
 9. THE Dialect_Transformer SHALL Dependency InjectionパターンでPFCP_Session_State_Managerに注入される
+10. THE DSL SHALL Create/Update/RemoveのPDR/FAR/QER差分を表現できる
+11. THE DSL SHALL 同一SEID内で複数Route Instanceを生成する選択ルール（PDR-FAR-QER関連付け）を記述できる
+12. THE DSL Compiler SHALL 上記DSL定義から複数Session_Information生成可能なDialect_Transformer実装を生成する
 
 ### 要件6: DSLのパーサー、プリティプリンター、Linter
 
@@ -169,6 +177,13 @@
 7. WHEN Type_2_Session_Transformed_Routeを生成する場合、THE MUP_Controller SHALL RD、RT、MUP_Extended_Community、Endpoint_Address_Length、Nexthop_AddressをBGP_RIB_Infoから取得する
 8. THE MUP_Controller SHALL BGP_RIB_Infoから直接BGP RIBを生成できる
 9. THE MUP_Controller SHALL https://github.com/osrg/gobgp/blob/master/docs/sources/srv6_mup.md に記載されたMUP SAFI仕様に準拠する
+10. THE MUP_Controller SHALL デフォルトでType 1とType 2の両方のMUP SAFIルートを出力できる
+11. WHEN ルートタイプが明示指定されていない場合、THE MUP_Controller SHALL Type 1およびType 2の両方を出力する
+12. WHEN Session_InformationからEndpoint/TEIDが一時的に欠落した場合、THE MUP_Controller SHALL 直ちに削除せず保留状態として扱い、一定時間内に復帰しない場合のみDELETEを出力する
+   - 理由: PFCP Session ModificationでPDR/FARが入れ替わる際に、一時的に旧FARが削除され新FARが直後に作成されるため、Endpoint/TEIDが短時間だけ欠落する可能性がある
+13. WHEN 同一SEID内に複数Route Instanceが存在する場合、THE MUP_Controller SHALL Route InstanceごとにType 1/Type 2ルートを追加・更新・削除する
+14. THE MUP_Controller SHALL pending deleteをSEID単位ではなくRoute Instance単位で管理する
+15. WHEN 特定Route InstanceのNetwork_Instanceに対応するStatic Contextが欠落している場合、THE MUP_Controller SHALL 当該Route Instanceのみをスキップし他のRoute Instance処理を継続する
 
 ### 要件9: エラーハンドリングとログ出力
 

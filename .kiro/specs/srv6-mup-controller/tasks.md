@@ -68,6 +68,53 @@
     - 環境変数のオーバーライドをテスト
     - デフォルトパスのフォールバックをテスト
 
+- [ ] 追加タスク: MUP RIB出力の拡張と保留削除
+  - [ ] A.1 デフォルトでType 1/Type 2両方を出力するルートタイプ選択ロジックを実装
+    - `route-type` のデフォルトを `both` に変更
+    - `both` 指定時にType 1/Type 2の両方を送信
+    - _要件: 8.10, 8.11_
+  - [ ] A.2 IR Managerに保留削除（Grace Period）を実装
+    - `Endpoint/TEID` 欠落時は即DELETEせず保留状態に遷移
+    - 保留期間内に復帰しなければDELETE
+    - 保留期間内に復帰した場合はUPDATE
+    - _要件: 8.12_
+  - [ ] A.3 監視ループ（ticker）と停止処理を実装
+    - `StartPendingDeleteWatcher` で期限切れを監視
+    - contextキャンセル時に終了
+  - [ ] A.4 dry-run出力のType別フィールド表示を整合させる
+    - Type 1: Source Addressのみ（Type 2専用フィールドは出さない）
+    - Type 2: Endpoint Address Length / MUP Extended Community を出す
+  - [ ] A.5 SEIDエイリアスの正規化をDeletion通知に適用する
+    - Establishment ResponseでCP/UP SEIDの対応を登録
+    - Deletionイベントはcanonical SEIDでIR Managerへ通知
+    - _要件: 2.10, 2.11_
+
+- [ ] 追加タスク: Multi-leg ST Route対応（機能ブランチ単位）
+  - [ ] B.1 `feat/spec-multileg-dsl-compiler`
+    - 要件/設計をRoute Instance前提へ更新
+    - DSL/Compilerで複数SessionInformation生成を扱う方針を明文化
+    - _要件: 4.1-4.7, 5.1-5.12, 8.2-8.15_
+  - [ ] B.2 `feat/pfcp-delta-qer-merge`
+    - PFCPSessionStateDeltaへQER差分を追加
+    - create/update/removeのPDR/FAR/QERをSessionStateに正しくマージ
+    - _要件: 2.4, 2.8, 5.5_
+  - [ ] B.3 `feat/keysight-multileg-transformer`
+    - Keysight_N9 Transformerを複数Route Instance生成へ拡張
+    - map走査順依存を排除し決定的な抽出順を実装
+    - _要件: 5.6, 12.7, 12.8_
+  - [ ] B.4 `feat/ir-routekey-store`
+    - IR ManagerをSEIDキーからRouteKeyキーへ移行
+    - pending deleteをRoute Instance単位へ移行
+    - _要件: 4.6, 8.3, 8.4, 8.12, 8.14_
+  - [ ] B.5 `feat/pipeline-bgp-multiroute`
+    - Pipeline/BGP送信を複数RIBイベントに対応
+    - Static Context不足時にRoute Instance単位でskip継続
+    - _要件: 8.2, 8.3, 8.4, 8.15_
+  - [ ] B.6 `feat/tests-multileg-expected`
+    - Keysight level2/level3期待値を見直し（QFI, FAR update/remove反映）
+    - 複数Route Instanceの統合テストを追加
+    - _要件: 12.6-12.16_
+
 - [x] 2. フェーズ2: DSL実装（第3-4週）
   - [x] 2.1 DSL字句解析器とパーサーの実装
     - DSLトークン化のための字句解析器を実装
