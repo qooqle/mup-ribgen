@@ -63,6 +63,12 @@ func (m *SessionManager) resolveSEID(seid uint64) uint64 {
 	return seid
 }
 
+// CanonicalSEID returns the canonical (CP) SEID for a given SEID,
+// following the alias chain if necessary.
+func (m *SessionManager) CanonicalSEID(seid uint64) uint64 {
+	return m.resolveSEID(seid)
+}
+
 // HandleEstablishment processes a PFCP Session Establishment Request (req 2.3).
 // Creates a new session state and returns the resulting SessionInformation.
 func (m *SessionManager) HandleEstablishment(req *PFCPEstablishmentRequest) (*ir.SessionInformation, error) {
@@ -126,9 +132,50 @@ func mergeStateDeltaInto(state *PFCPSessionState, delta *PFCPSessionStateDelta) 
 		delete(state.PDRs, id)
 	}
 	for id, far := range delta.UpdateFARs {
+		if existing, ok := state.FARs[id]; ok {
+			state.FARs[id] = mergeFAR(existing, far)
+			continue
+		}
 		state.FARs[id] = far
 	}
 	for _, id := range delta.RemoveFARs {
 		delete(state.FARs, id)
 	}
+	for id, qer := range delta.UpdateQERs {
+		state.QERs[id] = qer
+	}
+	for _, id := range delta.RemoveQERs {
+		delete(state.QERs, id)
+	}
+}
+
+// mergeFAR applies partial update fields onto an existing FAR.
+// It specifically handles Update Forwarding Parameters IE by merging it into
+// forwarding_parameters so downstream extraction can use a single path.
+func mergeFAR(existing, update *FAR) *FAR {
+	if existing == nil {
+		return update
+	}
+	if update == nil {
+		return existing
+	}
+	if existing.Fields == nil {
+		existing.Fields = map[string]interface{}{}
+	}
+	for k, v := range update.Fields {
+		existing.Fields[k] = v
+	}
+	ufp, _ := update.Fields["update_forwarding_parameters"].(map[string]interface{})
+	if ufp == nil {
+		return existing
+	}
+	fwd, _ := existing.Fields["forwarding_parameters"].(map[string]interface{})
+	if fwd == nil {
+		fwd = map[string]interface{}{}
+	}
+	for k, v := range ufp {
+		fwd[k] = v
+	}
+	existing.Fields["forwarding_parameters"] = fwd
+	return existing
 }

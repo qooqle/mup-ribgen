@@ -89,8 +89,96 @@ func (t *KeysightN9Transformer) ModificationToState(req *pfcp.PFCPModificationRe
 		}
 	}
 
-	// pfcp.create_qer[*].qer_id – QERs stored in state via the session manager merge.
-	// (QERs are not in PFCPSessionStateDelta; they are added here as a FAR extension.)
+	// pfcp.update_far[*].far_id -> UpdateFARs
+	if arr, ok := rtn9.GetArray(rtn9.GetField(req.Fields, "pfcp", "update_far")); ok {
+		for _, item := range arr {
+			itemFields, _ := item.(map[string]interface{})
+			if itemFields == nil {
+				continue
+			}
+			farID := rtn9.CoerceUint32(itemFields["far_id"])
+			if farID == 0 {
+				continue
+			}
+			delta.UpdateFARs[farID] = &pfcp.FAR{FARID: farID, Fields: itemFields}
+		}
+	}
+
+	if arr, ok := rtn9.GetArray(rtn9.GetField(req.Fields, "pfcp", "remove_pdr")); ok {
+		for _, item := range arr {
+			itemFields, _ := item.(map[string]interface{})
+			if itemFields == nil {
+				continue
+			}
+			pdrID := rtn9.CoerceUint16(itemFields["pdr_id"])
+			if pdrID == 0 {
+				continue
+			}
+			delta.RemovePDRs = append(delta.RemovePDRs, pdrID)
+		}
+	}
+
+	if arr, ok := rtn9.GetArray(rtn9.GetField(req.Fields, "pfcp", "remove_far")); ok {
+		for _, item := range arr {
+			itemFields, _ := item.(map[string]interface{})
+			if itemFields == nil {
+				continue
+			}
+			farID := rtn9.CoerceUint32(itemFields["far_id"])
+			if farID == 0 {
+				continue
+			}
+			delta.RemoveFARs = append(delta.RemoveFARs, farID)
+		}
+	}
+
+	if arr, ok := rtn9.GetArray(rtn9.GetField(req.Fields, "pfcp", "create_qer")); ok {
+		for _, item := range arr {
+			itemFields, _ := item.(map[string]interface{})
+			if itemFields == nil {
+				continue
+			}
+			qerID := rtn9.CoerceUint32(itemFields["qer_id"])
+			if qerID == 0 {
+				continue
+			}
+			if delta.UpdateQERs == nil {
+				delta.UpdateQERs = make(map[uint32]*pfcp.QER)
+			}
+			delta.UpdateQERs[qerID] = &pfcp.QER{QERID: qerID, Fields: itemFields}
+		}
+	}
+
+	if arr, ok := rtn9.GetArray(rtn9.GetField(req.Fields, "pfcp", "update_qer")); ok {
+		for _, item := range arr {
+			itemFields, _ := item.(map[string]interface{})
+			if itemFields == nil {
+				continue
+			}
+			qerID := rtn9.CoerceUint32(itemFields["qer_id"])
+			if qerID == 0 {
+				continue
+			}
+			if delta.UpdateQERs == nil {
+				delta.UpdateQERs = make(map[uint32]*pfcp.QER)
+			}
+			delta.UpdateQERs[qerID] = &pfcp.QER{QERID: qerID, Fields: itemFields}
+		}
+	}
+
+	if arr, ok := rtn9.GetArray(rtn9.GetField(req.Fields, "pfcp", "remove_qer")); ok {
+		for _, item := range arr {
+			itemFields, _ := item.(map[string]interface{})
+			if itemFields == nil {
+				continue
+			}
+			qerID := rtn9.CoerceUint32(itemFields["qer_id"])
+			if qerID == 0 {
+				continue
+			}
+			delta.RemoveQERs = append(delta.RemoveQERs, qerID)
+		}
+	}
 
 	return delta, nil
 }
