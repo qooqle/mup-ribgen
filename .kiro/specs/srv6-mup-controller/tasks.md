@@ -115,6 +115,16 @@
     - 複数Route Instanceの統合テストを追加
     - _要件: 12.6-12.16_
 
+- [x] 追加タスク: BGP送信の完全性検証と差分抑止
+  - [x] C.1 RouteTypeごとの必須フィールドが欠落したRIBのADD/UPDATEを抑止
+    - Type1必須: `RD/RT/Nexthop/UE IP(or Prefix)/Endpoint/TEID`
+    - Type2必須: `RD/RT/Nexthop/Endpoint/TEID/EndpointAddressLength`
+    - _要件: 8.16_
+  - [x] C.2 no-op UPDATE（実効差分なし）を抑止
+    - RouteType+RouteKey単位で前回送信スナップショットを比較
+    - 同一内容ならBGP Updateを送信しない
+    - _要件: 8.17_
+
 - [x] 2. フェーズ2: DSL実装（第3-4週）
   - [x] 2.1 DSL字句解析器とパーサーの実装
     - DSLトークン化のための字句解析器を実装

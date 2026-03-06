@@ -656,6 +656,14 @@ type SessionInformation struct {
 - 保留削除タイマー満了で該当Route Instanceの `DELETE` を発行
 - 期間内に転送情報が復帰した場合は保留削除を解除し `UPDATE` を発行
 
+**BGP送信境界での妥当性検証と差分抑止**:
+- `Dialect Transformer` はデータ抽出（PFCP→Session Information）に責務を限定する
+- RouteType依存の送信可否判定（必須フィールド充足）は `pipeline(IR→BGP)` で実施する
+  - Type1必須: `RD/RT/Nexthop/UE IP(or Prefix)/Endpoint/TEID`
+  - Type2必須: `RD/RT/Nexthop/Endpoint/TEID/EndpointAddressLength`
+- `UPDATE` は RouteType+RouteKey 単位で前回送信済みスナップショットを比較し、実効差分がない場合は送信しない
+- この配置により、方言ごとのDSL生成コードに送信ポリシーを重複実装せず、BGP送信制御を一元化する
+
 ### Static Context Manager
 
 **責務**:

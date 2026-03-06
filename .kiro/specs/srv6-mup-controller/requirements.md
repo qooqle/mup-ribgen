@@ -184,6 +184,10 @@
 13. WHEN 同一SEID内に複数Route Instanceが存在する場合、THE MUP_Controller SHALL Route InstanceごとにType 1/Type 2ルートを追加・更新・削除する
 14. THE MUP_Controller SHALL pending deleteをSEID単位ではなくRoute Instance単位で管理する
 15. WHEN 特定Route InstanceのNetwork_Instanceに対応するStatic Contextが欠落している場合、THE MUP_Controller SHALL 当該Route Instanceのみをスキップし他のRoute Instance処理を継続する
+16. WHEN Type_1またはType_2ルート生成に必要な必須フィールドが不足している場合、THE MUP_Controller SHALL 当該Route InstanceのADD/UPDATE送信をスキップする
+   - Type_1必須: RD, RT, Nexthop, UE IP/Prefix, Endpoint, TEID
+   - Type_2必須: RD, RT, Nexthop, Endpoint, TEID, Endpoint_Address_Length
+17. WHEN UPDATE対象のRoute Instanceで実効的なBGPルート属性差分が存在しない場合、THE MUP_Controller SHALL BGP UPDATE送信を抑止する
 
 ### 要件9: エラーハンドリングとログ出力
 

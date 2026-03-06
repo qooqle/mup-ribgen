@@ -4,7 +4,9 @@ package pipeline
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
+	"strings"
 
 	"github.com/qooqle/mup-ribgen/pkg/ir"
 	"github.com/qooqle/mup-ribgen/pkg/mode1"
@@ -60,6 +62,7 @@ func ConnectMode1ToIR(ctx context.Context, ctrl *mode1.Controller, irMgr *ir.Man
 func ConnectIRToBGP(ctx context.Context, irMgr *ir.Manager, sender BGPSender, routeType string) {
 	go func() {
 		types := normalizeRouteTypes(routeType)
+		lastSent := make(map[string]string)
 		for ev := range irMgr.Events() {
 			if ev.Info == nil && ev.Type != ir.BGPEventDelete {
 				continue
@@ -67,19 +70,39 @@ func ConnectIRToBGP(ctx context.Context, irMgr *ir.Manager, sender BGPSender, ro
 			switch ev.Type {
 			case ir.BGPEventCreate:
 				for _, rt := range types {
+					if !isRIBReadyForRouteType(rt, ev.Info) {
+						slog.Warn("pipeline: skip BGP add due to incomplete RIB",
+							"route_type", rt, "route_key", ev.RouteKey, "seid", ev.SEID)
+						continue
+					}
 					logBGPEvent("add", rt, ev)
 					sendBGP(ctx, sender, rt, "add", ev.Info)
+					lastSent[routeStateKey(rt, ev.Info)] = ribFingerprint(rt, ev.Info)
 				}
 			case ir.BGPEventUpdate:
 				for _, rt := range types {
+					if !isRIBReadyForRouteType(rt, ev.Info) {
+						slog.Warn("pipeline: skip BGP update due to incomplete RIB",
+							"route_type", rt, "route_key", ev.RouteKey, "seid", ev.SEID)
+						continue
+					}
+					k := routeStateKey(rt, ev.Info)
+					fp := ribFingerprint(rt, ev.Info)
+					if prev, ok := lastSent[k]; ok && prev == fp {
+						slog.Debug("pipeline: suppress no-op BGP update",
+							"route_type", rt, "route_key", ev.RouteKey, "seid", ev.SEID)
+						continue
+					}
 					logBGPEvent("update", rt, ev)
 					sendBGP(ctx, sender, rt, "update", ev.Info)
+					lastSent[k] = fp
 				}
 			case ir.BGPEventDelete:
 				if ev.Info != nil {
 					for _, rt := range types {
 						logBGPEvent("delete", rt, ev)
 						sendBGP(ctx, sender, rt, "delete", ev.Info)
+						delete(lastSent, routeStateKey(rt, ev.Info))
 					}
 				}
 			}
@@ -142,4 +165,53 @@ func logBGPEvent(op, routeType string, ev *ir.BGPEvent) {
 		"teid", ev.Info.TEID,
 		"qfi", ev.Info.QFI,
 	)
+}
+
+func routeStateKey(routeType string, rib *ir.BGPRIBInfo) string {
+	return routeType + "|" + rib.RouteKey
+}
+
+func isRIBReadyForRouteType(routeType string, rib *ir.BGPRIBInfo) bool {
+	if rib == nil {
+		return false
+	}
+	if rib.RD == "" || len(rib.RT) == 0 || rib.NexthopAddress == "" {
+		return false
+	}
+	if rib.EndpointAddress == "" || rib.TEID == 0 {
+		return false
+	}
+	switch routeType {
+	case "type2":
+		return rib.EndpointAddressLength != nil && *rib.EndpointAddressLength > 0
+	default: // type1
+		return rib.UEPrefix != "" || rib.UEIPAddress != ""
+	}
+}
+
+func ribFingerprint(routeType string, rib *ir.BGPRIBInfo) string {
+	base := fmt.Sprintf("%s|%d|%s|%s|%d|%s",
+		rib.RD, rib.SEID, rib.EndpointAddress, rib.NexthopAddress, rib.TEID, strings.Join(rib.RT, ","))
+	switch routeType {
+	case "type2":
+		epLen := 0
+		if rib.EndpointAddressLength != nil {
+			epLen = *rib.EndpointAddressLength
+		}
+		seg := ""
+		if rib.MUPExtendedCommunity != nil {
+			seg = fmt.Sprintf("%x", rib.MUPExtendedCommunity.SegmentIdentifier)
+		}
+		return fmt.Sprintf("%s|%d|%s", base, epLen, seg)
+	default: // type1
+		ue := rib.UEIPAddress
+		if rib.UEPrefix != "" {
+			ue = rib.UEPrefix
+		}
+		src := ""
+		if rib.SourceAddress != nil {
+			src = *rib.SourceAddress
+		}
+		return fmt.Sprintf("%s|%s|%d|%s", base, ue, rib.QFI, src)
+	}
 }

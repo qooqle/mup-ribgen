@@ -21,6 +21,22 @@ import (
 type stubSctx struct{}
 
 func (s *stubSctx) GetContext(_ string) (*ir.StaticContext, error) {
+	epLen := 32
+	src := "2001:db8::1"
+	return &ir.StaticContext{
+		NetworkInstance: "n9-nw",
+		RD:              "65000:100",
+		RT:              []string{"65000:200"},
+		SourceAddress:   &src,
+		EndpointAddressLength: &epLen,
+		MUPExtendedCommunity:  &ir.MUPExtendedCommunity{SegmentIdentifier: [6]byte{0, 1, 0, 0, 0, 2}},
+		NexthopAddress:  "192.168.1.1",
+	}, nil
+}
+
+type noLenSctx struct{}
+
+func (s *noLenSctx) GetContext(_ string) (*ir.StaticContext, error) {
 	return &ir.StaticContext{
 		NetworkInstance: "n9-nw",
 		RD:              "65000:100",
@@ -55,6 +71,7 @@ func (t *stubTransformer) StateToSessionInfo(state *pfcp.PFCPSessionState) (*ir.
 		UEIPAddress:     "10.0.0.1",
 		EndpointAddress: "20.0.0.1",
 		TEID:            1,
+		QFI:             5,
 		NetworkInstance: "n9-nw",
 		Source:          ir.Mode1PFCP,
 	}, nil
@@ -347,6 +364,85 @@ func TestE2E_Type2RouteFlowsToGoBGP(t *testing.T) {
 	for _, op := range ops {
 		if op != fmt.Sprintf("add_type2") && op != "update_type2" && op != "delete_type2" {
 			t.Errorf("unexpected operation %q for type2 mode", op)
+		}
+	}
+}
+
+func TestConnectIRToBGP_SuppressNoOpUpdate(t *testing.T) {
+	sctx := &stubSctx{}
+	irMgr := ir.NewManager(sctx, 32)
+	sender := &recordingBGPSender{}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	pipeline.ConnectIRToBGP(ctx, irMgr, sender, "type1")
+
+	info := &ir.SessionInformation{
+		RouteKey:        "1:11",
+		FARID:           11,
+		SEID:            1,
+		UEIPAddress:     "10.0.0.1",
+		EndpointAddress: "20.0.0.1",
+		TEID:            1,
+		QFI:             5,
+		NetworkInstance: "n9-nw",
+		Source:          ir.Mode1PFCP,
+	}
+	if err := irMgr.HandleCreate(info); err != nil {
+		t.Fatalf("HandleCreate: %v", err)
+	}
+	if err := irMgr.HandleUpdate(info); err != nil {
+		t.Fatalf("HandleUpdate: %v", err)
+	}
+
+	deadline := time.Now().Add(500 * time.Millisecond)
+	for time.Now().Before(deadline) {
+		sender.mu.Lock()
+		n := len(sender.ops)
+		sender.mu.Unlock()
+		if n >= 1 {
+			break
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+
+	sender.mu.Lock()
+	defer sender.mu.Unlock()
+	if len(sender.ops) != 1 || sender.ops[0] != "add_type1" {
+		t.Fatalf("expected only add_type1 due to no-op suppression, got: %v", sender.ops)
+	}
+}
+
+func TestConnectIRToBGP_SkipIncompleteType2(t *testing.T) {
+	sender := &recordingBGPSender{}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	// Build direct update by using a separate manager with a context that omits ep length.
+	irMgr2 := ir.NewManager(&noLenSctx{}, 32)
+	pipeline.ConnectIRToBGP(ctx, irMgr2, sender, "type2")
+	info := &ir.SessionInformation{
+		RouteKey:        "1:11",
+		FARID:           11,
+		SEID:            1,
+		UEIPAddress:     "10.0.0.1",
+		EndpointAddress: "20.0.0.1",
+		TEID:            1,
+		QFI:             5,
+		NetworkInstance: "n9-nw",
+		Source:          ir.Mode1PFCP,
+	}
+	if err := irMgr2.HandleCreate(info); err != nil {
+		t.Fatalf("HandleCreate: %v", err)
+	}
+
+	time.Sleep(150 * time.Millisecond)
+	sender.mu.Lock()
+	defer sender.mu.Unlock()
+	for _, op := range sender.ops {
+		if op == "add_type2" || op == "update_type2" {
+			t.Fatalf("expected no type2 sends for incomplete route, got ops=%v", sender.ops)
 		}
 	}
 }

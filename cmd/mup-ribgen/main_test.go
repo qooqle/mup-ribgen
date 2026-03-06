@@ -199,7 +199,7 @@ func (r *recordingDryRunSender) DeleteType2Route(_ context.Context, rib *ir.BGPR
 }
 
 // TestDryRunFromPCAP verifies dry-run output is derived from PCAP + static_context
-// and includes add/update/delete for both route types.
+// and includes add/delete for both route types. Update is emitted only when effective diff exists.
 func TestDryRunFromPCAP(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -439,11 +439,11 @@ func TestDryRunFromPCAP(t *testing.T) {
 		}
 	}
 
-	if !seen["ADD_type1"] || !seen["UPDATE_type1"] || !seen["DELETE_type1"] {
-		t.Fatalf("missing type1 ops: %+v", seen)
+	if !seen["ADD_type1"] || !seen["DELETE_type1"] {
+		t.Fatalf("missing required type1 ops: %+v", seen)
 	}
-	if !seen["ADD_type2"] || !seen["UPDATE_type2"] || !seen["DELETE_type2"] {
-		t.Fatalf("missing type2 ops: %+v", seen)
+	if !seen["ADD_type2"] || !seen["DELETE_type2"] {
+		t.Fatalf("missing required type2 ops: %+v", seen)
 	}
 }
 
