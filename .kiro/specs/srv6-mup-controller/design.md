@@ -220,8 +220,10 @@ type DialectTransformer interface {
     EstablishmentToState(pfcp *PFCPEstablishmentRequest) (*PFCPSessionState, error)
     ModificationToState(pfcp *PFCPModificationRequest) (*PFCPSessionStateDelta, error)
     
-    // PFCP Session State → Session Information
+    // PFCP Session State → Session Information（単一出力: 互換）
     StateToSessionInfo(state *PFCPSessionState) (*SessionInformation, error)
+    // PFCP Session State → Session Information（複数Route Instance対応）
+    StateToSessionInfos(state *PFCPSessionState) ([]*SessionInformation, error)
     
     // 方言名を返す
     Name() string
@@ -243,6 +245,8 @@ type PFCPSessionStateDelta struct {
     RemovePDRs   []uint16
     UpdateFARs   map[uint32]*FAR
     RemoveFARs   []uint32
+    UpdateQERs   map[uint32]*QER
+    RemoveQERs   []uint32
 }
 ```
 
@@ -253,24 +257,29 @@ type PFCPSessionStateDelta struct {
 - セッション状態の保持と更新
 - Modificationメッセージの差分を既存ステートにマージ
 - 完全なSession Informationの生成
+- CP SEIDとUP SEIDの名寄せ（SEIDエイリアス）の管理
 
 **実装方針**:
 - インメモリストレージ（将来的に永続化対応）
 - SEIDをキーとしたマップ構造
 - スレッドセーフな操作（sync.RWMutex）
 - Dialect TransformerをDIで注入
+- Establishment ResponseのヘッダSEID（CP）とF-SEID（UP）を対応付け、以後のModification/Deletionで正規化SEIDを使用する
 
 **インターフェース**:
 ```go
 type PFCPSessionStateManager interface {
     // Establishmentメッセージを処理
-    HandleEstablishment(pfcp *PFCPEstablishmentRequest) (*SessionInformation, error)
+    HandleEstablishment(pfcp *PFCPEstablishmentRequest) ([]*SessionInformation, error)
     
     // Modificationメッセージを処理（差分をマージ）
-    HandleModification(pfcp *PFCPModificationRequest) (*SessionInformation, error)
+    HandleModification(pfcp *PFCPModificationRequest) ([]*SessionInformation, error)
     
     // Deletionメッセージを処理
     HandleDeletion(pfcp *PFCPDeletionRequest) error
+
+    // SEIDを正規化（UP SEID → CP SEID）
+    CanonicalSEID(seid uint64) uint64
     
     // セッション状態を取得
     GetState(seid uint64) (*PFCPSessionState, error)
@@ -594,36 +603,45 @@ type LintIssue struct {
 **責務**:
 - Session InformationとStatic Contextの合成によるBGP RIB Info生成
 - BGP RIB Infoの管理とGoBGP Clientへの通知
+- ルーティング情報の一時欠落（Endpoint/TEID消失）に対する保留削除（Grace Period）管理
+  - 理由: PFCP Session Modificationにより旧FAR削除→新FAR作成が短時間で行われることがあり、その間Endpoint/TEIDが一時的に未確定となり得る
 
 **実装方針**:
 - インメモリストレージ（将来的に永続化対応）
-- セッションIDをキーとしたマップ構造
+- RouteKeyをキーとしたマップ構造（route_key = canonical_seid + far_id）
 - スレッドセーフな操作（sync.RWMutex）
 - BGP RIB Info生成時に必ずStatic Contextと合成
+- Endpoint/TEID欠落時は即時DELETEせず、一定時間の猶予を設ける
+- 猶予期間内に転送情報が復帰すればUPDATEとして扱う
 
 **インターフェース**:
 ```go
 type IRManager interface {
-    // Session InformationとStatic ContextからBGP RIB Infoを生成・保存
-    CreateFromSession(sessionID string, sessionInfo *SessionInformation, staticCtx *StaticContext) (*BGPRIBInfo, error)
+    // Session InformationとStatic ContextからBGP RIB Infoを生成・保存（Route Instance単位）
+    CreateFromSession(routeKey string, sessionInfo *SessionInformation, staticCtx *StaticContext) (*BGPRIBInfo, error)
     
     // Session InformationとStatic ContextからBGP RIB Infoを更新
-    UpdateFromSession(sessionID string, sessionInfo *SessionInformation, staticCtx *StaticContext) (*BGPRIBInfo, error)
+    UpdateFromSession(routeKey string, sessionInfo *SessionInformation, staticCtx *StaticContext) (*BGPRIBInfo, error)
     
     // BGP RIB Infoを削除
-    Delete(sessionID string) error
+    Delete(routeKey string) error
     
     // BGP RIB Infoを取得（既に完全な状態）
-    Get(sessionID string) (*BGPRIBInfo, error)
+    Get(routeKey string) (*BGPRIBInfo, error)
     
     // 全BGP RIB Infoをリスト
     List() ([]*BGPRIBInfo, error)
+
+    // 保留削除の監視を開始
+    StartPendingDeleteWatcher(ctx context.Context)
 }
 
 // Session Information（PFCPやSMF内部データから抽出）
 type SessionInformation struct {
+    RouteKey        string
     SessionID       string
     SEID            uint64
+    FARID           uint32
     UEIPAddress     string
     UEPrefix        string
     TEID            uint32
@@ -632,6 +650,19 @@ type SessionInformation struct {
     NetworkInstance string
 }
 ```
+
+**保留削除（Grace Period）ロジック**:
+- `EndpointAddress == ""` または `TEID == 0` の場合、RIB更新は行わず保留削除に遷移
+- 保留削除タイマー満了で該当Route Instanceの `DELETE` を発行
+- 期間内に転送情報が復帰した場合は保留削除を解除し `UPDATE` を発行
+
+**BGP送信境界での妥当性検証と差分抑止**:
+- `Dialect Transformer` はデータ抽出（PFCP→Session Information）に責務を限定する
+- RouteType依存の送信可否判定（必須フィールド充足）は `pipeline(IR→BGP)` で実施する
+  - Type1必須: `RD/RT/Nexthop/UE IP(or Prefix)/Endpoint/TEID`
+  - Type2必須: `RD/RT/Nexthop/Endpoint/TEID/EndpointAddressLength`
+- `UPDATE` は RouteType+RouteKey 単位で前回送信済みスナップショットを比較し、実効差分がない場合は送信しない
+- この配置により、方言ごとのDSL生成コードに送信ポリシーを重複実装せず、BGP送信制御を一元化する
 
 ### Static Context Manager
 
@@ -724,6 +755,10 @@ Session Informationは、PFCPやSMF内部データから抽出した生のセッ
 
 ```go
 type SessionInformation struct {
+    // Route Instance識別
+    RouteKey        string   // canonical_seid + far_id
+    FARID           uint32
+
     // セッション識別情報
     SessionID       string
     SEID            uint64
@@ -760,6 +795,10 @@ BGP RIB Infoは、Session InformationとStatic Contextを合成した完全なBG
 
 ```go
 type BGPRIBInfo struct {
+    // Route Instance識別情報
+    RouteKey        string
+    FARID           uint32
+
     // セッション識別情報（Session Informationから）
     SessionID       string
     SEID            uint64
@@ -1004,6 +1043,10 @@ mapping state_to_session_info {
     State.FARs[0].EndpointAddress -> SessionInfo.EndpointAddress
 }
 ```
+
+複数Route Instance対応では、`state_to_session_info`を`state_to_session_infos`へ拡張し、
+`for each forwarding FAR`（`apply_action.forw=1`）を単位にSessionInformationを複数生成する。
+各出力には `RouteKey` と `FARID` を付与し、IR ManagerはRouteKey単位で管理する。
 
 
 ## Correctness Properties

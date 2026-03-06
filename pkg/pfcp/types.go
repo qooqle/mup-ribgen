@@ -52,6 +52,8 @@ type PFCPSessionStateDelta struct {
 	RemovePDRs []uint16
 	UpdateFARs map[uint32]*FAR
 	RemoveFARs []uint32
+	UpdateQERs map[uint32]*QER
+	RemoveQERs []uint32
 }
 
 // PFCPEstablishmentRequest is the parsed representation of a PFCP

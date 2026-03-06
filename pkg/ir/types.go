@@ -15,6 +15,10 @@ const (
 // SessionInformation is the unified session data model that abstracts over
 // PFCP dialect differences and SMF implementation variations.
 type SessionInformation struct {
+	// Route instance identification (multi-leg support)
+	RouteKey string
+	FARID    uint32
+
 	// Session identification
 	SessionID string
 	SEID      uint64
@@ -67,6 +71,10 @@ type StaticContext struct {
 // IR Manager from a SessionInformation and its corresponding StaticContext.
 // It contains all fields required to generate MUP SAFI routes for GoBGP.
 type BGPRIBInfo struct {
+	// Route instance identification (multi-leg support)
+	RouteKey string
+	FARID    uint32
+
 	// Session identification (from SessionInformation)
 	SessionID string
 	SEID      uint64

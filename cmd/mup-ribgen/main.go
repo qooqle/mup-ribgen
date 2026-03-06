@@ -16,8 +16,8 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"encoding/hex"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log/slog"
@@ -53,7 +53,7 @@ func main() {
 		flagDialect       = flag.String("dialect", "", "PFCP dialect transformer name (overrides config file)")
 		flagDryRun        = flag.Bool("dry-run", false, "print BGP routes instead of sending to GoBGP")
 		flagGoBGPAddr     = flag.String("gobgp-addr", "", "GoBGP daemon gRPC address host:port (overrides config file)")
-		flagRouteType     = flag.String("route-type", "type1", "MUP SAFI route type: type1 or type2")
+		flagRouteType     = flag.String("route-type", "both", "MUP SAFI route type: type1, type2, or both")
 		flagLogLevel      = flag.String("log-level", "", "log level: debug, info, warn, error (overrides config file)")
 		flagVersion       = flag.Bool("version", false, "print version and exit")
 		flagChannelBuffer = flag.Int("channel-buffer", 128, "event channel buffer size")
@@ -163,6 +163,7 @@ func main() {
 
 	// --- IR manager ----------------------------------------------------------
 	irMgr := ir.NewManager(sctxMgr, *flagChannelBuffer)
+	irMgr.StartPendingDeleteWatcher(ctx)
 
 	// --- BGP sender ----------------------------------------------------------
 	var sender pipeline.BGPSender
@@ -225,55 +226,50 @@ func (d *dryRunSender) DeleteType2Route(_ context.Context, rib *ir.BGPRIBInfo) e
 	return d.print("DELETE", "type2", rib)
 }
 
-type routeOutput struct {
-	Op        string   `json:"op"`
-	RouteType string   `json:"route_type"`
-	SEID      uint64   `json:"seid"`
-	UEID      string   `json:"ue_ip,omitempty"`
-	UEPrefix  string   `json:"ue_prefix,omitempty"`
-	Endpoint  string   `json:"endpoint"`
-	TEID      uint32   `json:"teid"`
-	QFI       uint8    `json:"qfi,omitempty"`
-	RD        string   `json:"rd"`
-	RT        []string `json:"rt"`
-	Nexthop   string   `json:"nexthop"`
-	Network   string   `json:"network_instance"`
-	Source    *string  `json:"source_address,omitempty"`
-
-	EndpointAddressLength *int                      `json:"endpoint_address_length,omitempty"`
-	MUPExtendedCommunity  *mupExtendedCommunityJSON `json:"mup_extended_community,omitempty"`
-}
-
 func (d *dryRunSender) print(op, routeType string, rib *ir.BGPRIBInfo) error {
-	out := routeOutput{
-		Op:        op,
-		RouteType: routeType,
-		SEID:      rib.SEID,
-		UEID:      rib.UEIPAddress,
-		UEPrefix:  rib.UEPrefix,
-		Endpoint:  rib.EndpointAddress,
-		TEID:      rib.TEID,
-		QFI:       rib.QFI,
-		RD:        rib.RD,
-		RT:        rib.RT,
-		Nexthop:   rib.NexthopAddress,
-		Network:   rib.NetworkInstance,
-		Source:    rib.SourceAddress,
-
-		EndpointAddressLength: rib.EndpointAddressLength,
-	}
-	if rib.MUPExtendedCommunity != nil {
-		out.MUPExtendedCommunity = &mupExtendedCommunityJSON{
-			SegmentIdentifier: hex.EncodeToString(rib.MUPExtendedCommunity.SegmentIdentifier[:]),
-		}
-	}
-	b, _ := json.Marshal(out)
+	b, _ := json.Marshal(buildDryRunOutput(op, routeType, rib))
 	fmt.Println(string(b))
 	return nil
 }
 
-type mupExtendedCommunityJSON struct {
-	SegmentIdentifier string `json:"segment_identifier"`
+func buildDryRunOutput(op, routeType string, rib *ir.BGPRIBInfo) map[string]interface{} {
+	out := map[string]interface{}{
+		"op":               op,
+		"route_type":       routeType,
+		"seid":             rib.SEID,
+		"route_key":        rib.RouteKey,
+		"far_id":           rib.FARID,
+		"network_instance": rib.NetworkInstance,
+		"rd":               rib.RD,
+		"rt":               rib.RT,
+		"nexthop":          rib.NexthopAddress,
+	}
+	switch routeType {
+	case "type2":
+		out["endpoint"] = rib.EndpointAddress
+		out["teid"] = rib.TEID
+		if rib.EndpointAddressLength != nil {
+			out["endpoint_address_length"] = *rib.EndpointAddressLength
+		}
+		if rib.MUPExtendedCommunity != nil {
+			out["mup_extended_community"] = map[string]interface{}{
+				"segment_identifier": hex.EncodeToString(rib.MUPExtendedCommunity.SegmentIdentifier[:]),
+			}
+		}
+	default: // type1
+		if rib.UEPrefix != "" {
+			out["ue_prefix"] = rib.UEPrefix
+		} else {
+			out["ue_ip"] = rib.UEIPAddress
+		}
+		out["endpoint"] = rib.EndpointAddress
+		out["teid"] = rib.TEID
+		out["qfi"] = rib.QFI
+		if rib.SourceAddress != nil && *rib.SourceAddress != "" {
+			out["source_address"] = *rib.SourceAddress
+		}
+	}
+	return out
 }
 
 // --- helpers -----------------------------------------------------------------

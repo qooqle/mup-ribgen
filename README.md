@@ -8,6 +8,21 @@ SRv6 MUP Controller — モバイルネットワークのセッション情報�
 - **Mode 2 (Active)**: free5GC SMF からgRPCプラグイン経由でセッション情報を受信（フェーズ5実装予定）
 - PFCP 方言の差異を DSL で吸収し、GoBGP に MUP SAFI ルートとして配信
 
+### 直近の実装ポイント（Keysight特化と共通処理の分離）
+
+- Keysight特化:
+  - `dsl/keysight_n9.dsl` と `pkg/dialect/keysight_n9_transformer.go` が PFCP IE 解釈と `SessionInformation` 抽出を担当
+- 共通:
+  - `pkg/ir` が RouteKey 単位でRIB管理
+  - `pkg/pipeline` が BGP送信判定を担当
+    - 必須項目未充足の Add/Update を送信しない
+    - no-op UPDATE（実効差分なし）を送信しない
+- `--dry-run` は Type1/Type2 生成に必要なフィールドを出力
+  - Type1: `ue_ip/ue_prefix`, `endpoint`, `teid`, `qfi`, `source_address(optional)`
+  - Type2: `endpoint`, `teid`, `endpoint_address_length`, `mup_extended_community(optional)`
+
+詳細は [docs/keysight-vs-core.md](docs/keysight-vs-core.md) を参照。
+
 ---
 
 ## ユーザーマニュアル
@@ -117,7 +132,7 @@ OPTIONS:
   --interface IFACE        ライブキャプチャのネットワークインターフェース
   --static-context FILE    Static Context JSON ファイルのパス（デフォルト: static_context.json）
   --dialect NAME           PFCP 方言トランスフォーマー名（デフォルト: Keysight_N9）
-  --route-type TYPE        MUP SAFI ルートタイプ: type1 または type2（デフォルト: type1）
+  --route-type TYPE        MUP SAFI ルートタイプ: type1 / type2 / both（デフォルト: both）
   --gobgp-addr HOST:PORT   GoBGP デーモンの gRPC アドレス（デフォルト: 127.0.0.1:50051）
   --dry-run                BGP ルートを GoBGP に送信せず stdout に出力
   --log-level LEVEL        ログレベル: debug, info, warn, error（デフォルト: info）
@@ -143,7 +158,7 @@ mup-ribgen \
 出力例：
 
 ```json
-{"op":"UPDATE","route_type":"type1","seid":1,"ue_ip":"172.16.0.1","endpoint":"20.0.90.11","teid":1,"rd":"65000:1","rt":["65000:100"],"nexthop":"192.168.1.1","network_instance":"n9-nw"}
+{"op":"UPDATE","route_type":"type1","seid":1,"route_key":"1:11","far_id":11,"network_instance":"n9-nw","ue_ip":"172.16.0.1","endpoint":"20.0.90.11","teid":1,"qfi":5,"rd":"65000:1","rt":["65000:100"],"nexthop":"192.168.1.1"}
 ```
 
 #### ライブキャプチャ + GoBGP 送信
@@ -306,10 +321,17 @@ PCAP / Interface
 ┌─────────────────────────────────────────────────────────────┐
 │  IR Manager (pkg/ir)                                        │
 │  SessionInformation + StaticContext → BGPRIBInfo            │
-│  In-memory store (map[SEID]*BGPRIBInfo)                     │
+│  In-memory store (map[RouteKey]*BGPRIBInfo)                 │
 │  BGPEvent channel                                           │
 └───────────────────────┬─────────────────────────────────────┘
                         │ BGPEvent
+                        ▼
+┌─────────────────────────────────────────────────────────────┐
+│  Pipeline (pkg/pipeline)                                    │
+│  RouteTypeごとの必須項目チェック                            │
+│  no-op UPDATE抑止（RouteType+RouteKey fingerprint比較）     │
+└───────────────────────┬─────────────────────────────────────┘
+                        │ send op (add/update/delete)
                         ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  BGP Client (pkg/bgp)                                       │
@@ -342,6 +364,8 @@ PCAP / Interface
 1. **非同期パイプライン**: コンポーネント間はバッファ付きチャネルで接続。バックプレッシャーは drop + WARN で対処（ロスレスより可用性を優先）。
 2. **SEID エイリアス機構**: パッシブスニッフィングでは CP SEID（Establishment Request）と UP SEID（Establishment Response の F-SEID IE）が異なる。Modification/Deletion は UP SEID を使用するため、`RegisterSEIDAlias` で解決。
 3. **DSL ビルド時コンパイル**: 方言変換ロジックは実行時ではなくビルド時にコンパイル。`go generate` で DSL → Go コードを生成。
+4. **RouteKey単位管理**: 同一SEID内の複数FARを `route_key=canonical_seid:far_id` で独立管理。
+5. **送信ポリシーの共通化**: BGP送信前の必須項目チェックと no-op UPDATE 抑止は `pkg/pipeline` に集約し、方言DSL側に重複実装しない。
 
 ### テスト戦略
 

@@ -143,6 +143,8 @@ func mergeIEs(fields map[string]interface{}, ies []rawIE) {
 			appendGrouped(fields, "update_far", ie.data)
 		case 13:
 			appendGrouped(fields, "update_qer", ie.data)
+		case 14:
+			appendGrouped(fields, "remove_qer", ie.data)
 		case 15:
 			appendGrouped(fields, "remove_pdr", ie.data)
 		case 16:
@@ -210,6 +212,10 @@ func mergeIEs(fields map[string]interface{}, ies []rawIE) {
 		case 109: // QER ID
 			if len(ie.data) >= 4 {
 				fields["qer_id"] = binary.BigEndian.Uint32(ie.data[:4])
+			}
+		case 124: // QFI
+			if len(ie.data) >= 1 {
+				fields["qfi_value"] = uint8(ie.data[0] & 0x3F)
 			}
 		}
 	}

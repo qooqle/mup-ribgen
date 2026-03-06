@@ -159,9 +159,35 @@ func mergeStateDelta(state *pfcp.PFCPSessionState, delta *pfcp.PFCPSessionStateD
 		delete(state.PDRs, id)
 	}
 	for id, far := range delta.UpdateFARs {
+		if existing, ok := state.FARs[id]; ok {
+			if existing.Fields == nil {
+				existing.Fields = map[string]interface{}{}
+			}
+			for k, v := range far.Fields {
+				existing.Fields[k] = v
+			}
+			if ufp, _ := far.Fields["update_forwarding_parameters"].(map[string]interface{}); ufp != nil {
+				fwd, _ := existing.Fields["forwarding_parameters"].(map[string]interface{})
+				if fwd == nil {
+					fwd = map[string]interface{}{}
+				}
+				for k, v := range ufp {
+					fwd[k] = v
+				}
+				existing.Fields["forwarding_parameters"] = fwd
+			}
+			state.FARs[id] = existing
+			continue
+		}
 		state.FARs[id] = far
 	}
 	for _, id := range delta.RemoveFARs {
 		delete(state.FARs, id)
+	}
+	for id, qer := range delta.UpdateQERs {
+		state.QERs[id] = qer
+	}
+	for _, id := range delta.RemoveQERs {
+		delete(state.QERs, id)
 	}
 }

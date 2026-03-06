@@ -310,4 +310,17 @@ func (t *{{ .TypeName }}Transformer) StateToSessionInfo(state *pfcp.PFCPSessionS
 {{ end }}
 	return info, nil
 }
+
+// StateToSessionInfos is the multi-route compatible default implementation.
+// Generated dialects can override this manually when they need per-leg extraction.
+func (t *{{ .TypeName }}Transformer) StateToSessionInfos(state *pfcp.PFCPSessionState) ([]*ir.SessionInformation, error) {
+	info, err := t.StateToSessionInfo(state)
+	if err != nil {
+		return nil, err
+	}
+	if info == nil {
+		return nil, nil
+	}
+	return []*ir.SessionInformation{info}, nil
+}
 `))

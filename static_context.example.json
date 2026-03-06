@@ -1,6 +1,15 @@
 {
   "$schema": "https://raw.githubusercontent.com/qooqle/mup-ribgen/main/pkg/staticctx/schema.json",
   "network_instances": {
+    "n3-nw": {
+      "rd": "65000:3",
+      "rt": ["65000:300"],
+      "nexthop": "192.168.1.1",
+      "endpoint_address_length": 32,
+      "mup_extended_community": {
+        "segment_identifier": "000100000003"
+      }
+    },
     "n9-nw": {
       "rd": "65000:1",
       "rt": ["65000:100"],
