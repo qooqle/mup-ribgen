@@ -68,7 +68,7 @@
     - 環境変数のオーバーライドをテスト
     - デフォルトパスのフォールバックをテスト
 
-- [ ] 追加タスク: MUP RIB出力の拡張と保留削除
+- [x] 追加タスク: MUP RIB出力の拡張と保留削除
   - [x] A.1 デフォルトでType 1/Type 2両方を出力するルートタイプ選択ロジックを実装
     - `route-type` のデフォルトを `both` に変更
     - `both` 指定時にType 1/Type 2の両方を送信
@@ -81,7 +81,7 @@
   - [x] A.3 監視ループ（ticker）と停止処理を実装
     - `StartPendingDeleteWatcher` で期限切れを監視
     - contextキャンセル時に終了
-  - [ ] A.4 dry-run出力のType別フィールド表示を整合させる
+  - [x] A.4 dry-run出力のType別フィールド表示を整合させる
     - Type 1: Source Addressのみ（Type 2専用フィールドは出さない）
     - Type 2: Endpoint Address Length / MUP Extended Community を出す
   - [x] A.5 SEIDエイリアスの正規化をDeletion通知に適用する
